@@ -1,10 +1,10 @@
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import Login from "./pages/Login/Login";
+import Login from "./pages/auth/Login/Login";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import Signup from "./pages/Signup/Signup";
+import Signup from "./pages/auth/Signup/Signup";
 import { ToastContainer } from "react-toastify";
 
 function App() {

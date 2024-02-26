@@ -1,78 +1,106 @@
-import Particle from "../../components/particle/Particle";
-import { Formik, Form, FormikHelpers } from "formik";
+import { TypeDispatch } from "../../../redux/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { Typewriter } from "react-simple-typewriter";
-import { userLogin, userOauthLogin } from "../../redux/actions/userActions";
-import IUserInformation from "../../interfaces/IUserInformation";
-import { TypeDispatch } from "../../redux/store/store";
-import BasicFormikInput from "../../components/input/BasicFormikInput";
-import { GoogleLogin } from "@react-oauth/google";
-import * as Yup from "yup";
-
-import Logo from "../../components/Logo/Logo";
+import { userRegister } from "../../../redux/actions/userActions";
+import Particle from "../../../components/particle/Particle";
+import Logo from "../../../components/Logo/Logo";
+import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import * as Yup from "yup";
+import BasicFormikInput from "../../../components/input/BasicFormikInput";
+import { GoogleLogin } from "@react-oauth/google";
+import { Typewriter } from "react-simple-typewriter";
+import IUserInformation from "../../../interfaces/IUserInformation";
 import { toast } from "react-toastify";
-import { setError } from "../../redux/reducers/userSlice";
+import { useEffect, useState } from "react";
+import OtpModal from "../../../components/modals/OtpModal";
+import { setMessage } from "../../../redux/reducers/userSlice";
 
-function Login() {
-  const { error, loading, user } = useSelector((state: any) => state.user);
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-      toast("Sucessfull!");
-    }
-    if (error && error === 401) {
-      toast.error("Invalid username or password!", { position: "top-center" });
-    } else if (error && error >= 400 && error <= 500) {
-      toast.error("Invalid request!");
-    }
-
-    if (error && error >= 500) {
-      toast.error("Something went wrong..! Please try again after some time..");
-    }
-    dispatch(setError(null));
-  }, [error, user]);
+function Signup() {
+  const [otpModal, setOtpModal] = useState(false);
+  const { error, message, user, loading } = useSelector(
+    (state: any) => state.user
+  );
+  const [userData, setUserData] = useState({});
   const initialValues = {
     username: "",
+    email: "",
     password: "",
+    confirmPassword: "",
   };
-  const dispatch: TypeDispatch = useDispatch();
+  useEffect(() => {
+    if (message && message.status === 200 && user === null) {
+      setOtpModal(true);
+      toast.info(message.message);
+      dispatch(setMessage(null));
+    }
+    if (message && message.status === 200 && user !== null) {
+      setOtpModal(false);
+      toast.info(message.message);
+      dispatch(setMessage(null));
+    }
+    if (error && error.status >= 400 && error.status <= 500) {
+      toast.error(error.message);
+    }
+    if (error && error.status >= 500) {
+      toast.error("Something went wrong..! Please try again after some time..");
+    }
+  }, [error, message]);
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required!"),
-    password: Yup.string().required("Password is required!"),
+    email: Yup.string()
+      .email("Email must be valid!")
+      .required("Email is required!"),
+    password: Yup.string()
+      .required("Password is required!")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one digit, and one special character!"
+      ),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Retype your password!"),
   });
-  function handleLoginSubmit(
-    userCredentials: IUserInformation,
-    { resetForm }: FormikHelpers<IUserInformation>
-  ) {
-    dispatch(userLogin(userCredentials));
-    resetForm();
-  }
+  const dispatch: TypeDispatch = useDispatch();
+  const handleRegisterSubmit = async (userCredentials: IUserInformation) => {
+    await dispatch(userRegister(userCredentials));
+    setUserData(userCredentials);
+  };
   return (
     <>
       <div className="h-[99vh] md:px-24 px-2">
         <Particle />
+        {otpModal && (
+          <OtpModal
+            registerSubmit={handleRegisterSubmit}
+            userData={userData}
+            setOtpModal={setOtpModal}
+          />
+        )}
         <div className="text-white font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
           <Logo />
         </div>
         <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 bg-opacity-15 bg-slate-400 rounded-xl lg:h-[74%] h-[74%] lg:w-[40%] w-[70%]">
+          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-slate-400 rounded-xl h-[85%] lg:h-[80%] lg:w-[40%] w-[70%]">
             <div className="flex flex-col">
-              <div className="lg:ps-20 pt-24 mb-14 ">
+              <div className="lg:ps-20 pt-20 mb-14 ">
                 <h2 className="text-white font-bold text-4xl text-center lg:text-left">
-                  Sign in
+                  Sign up
                 </h2>
               </div>
               <div className="items-center h-full">
                 <Formik
                   initialValues={initialValues}
-                  onSubmit={handleLoginSubmit}
+                  onSubmit={handleRegisterSubmit}
                   validationSchema={validationSchema}
                 >
                   <Form className="w-full flex flex-col items-center gap-5 justify-center">
                     <BasicFormikInput name="username" placeholder="Username" />
+                    <BasicFormikInput name="email" placeholder="Email" />
                     <BasicFormikInput name="password" placeholder="Password" />
+                    <BasicFormikInput
+                      name="confirmPassword"
+                      placeholder="Retype your password"
+                    />
                     <div></div>
                     <div className="mt-4">
                       <button
@@ -87,29 +115,30 @@ function Login() {
                         {loading ? (
                           <span className="animate-spin w-6 h-6 border-2 border-primary rounded-full border-t-transparent"></span>
                         ) : (
-                          "Login"
+                          "Register"
                         )}
                       </button>
                     </div>
                   </Form>
                 </Formik>
-                <p className="text-white w-full text-center pt-9">OR</p>
+                <p className="text-white w-full text-center pt-4 lg:pt-9">OR</p>
                 <div className="flex justify-center w-full mt-5">
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
-                      dispatch(userOauthLogin(credentialResponse.credential));
+                      console.log(credentialResponse);
                     }}
                     onError={() => {
                       console.log("Login Failed");
                     }}
                     useOneTap
+                    text="continue_with"
                   />
                 </div>
                 <div className="text-white text-md pt-5 lg:hidden relative flex  justify-center">
                   <div className="">
-                    Don't have an account?{" "}
+                    Already have an account?{" "}
                     <span className="text-primary font-semibold">
-                      <Link to={"/signup"}>Register</Link>
+                      <Link to={"/login"}>Login</Link>
                     </span>
                   </div>
                 </div>
@@ -133,9 +162,9 @@ function Login() {
             </div>
             <div className="text-white text-xl relative flex  justify-center">
               <div className="">
-                Don't have an account?{" "}
+                Already have an account?{" "}
                 <span className="text-primary font-semibold">
-                  <Link to={"/signup"}>Register</Link>
+                  <Link to={"/login"}>Login</Link>
                 </span>
               </div>
             </div>
@@ -146,4 +175,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

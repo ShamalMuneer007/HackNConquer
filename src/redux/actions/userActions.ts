@@ -35,9 +35,7 @@ export const userLogin = createAsyncThunk(
       if (error.response && error.response.status) {
         return rejectWithValue(error.response.status);
       } else {
-        return rejectWithValue(
-          "An error occurred while processing your request."
-        );
+        return rejectWithValue(error.message);
       }
     }
   }
