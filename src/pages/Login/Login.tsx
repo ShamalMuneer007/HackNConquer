@@ -1,31 +1,58 @@
 import Particle from "../../components/particle/Particle";
-import { Formik, Form } from "formik";
-import { useDispatch } from "react-redux";
+import { Formik, Form, FormikHelpers } from "formik";
+import { useDispatch, useSelector } from "react-redux";
 import { Typewriter } from "react-simple-typewriter";
-import { userLogin } from "../../redux/actions/userActions";
+import { userLogin, userOauthLogin } from "../../redux/actions/userActions";
 import IUserInformation from "../../interfaces/IUserInformation";
 import { TypeDispatch } from "../../redux/store/store";
 import BasicFormikInput from "../../components/input/BasicFormikInput";
 import { GoogleLogin } from "@react-oauth/google";
+import * as Yup from "yup";
 
 import Logo from "../../components/Logo/Logo";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { setError } from "../../redux/reducers/userSlice";
 
 function Login() {
+  const { error, loading, user } = useSelector((state: any) => state.user);
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      toast("Sucessfull!");
+    }
+    if (error && error === 401) {
+      toast.error("Invalid username or password!", { position: "top-center" });
+    } else if (error && error >= 400 && error <= 500) {
+      toast.error("Invalid request!");
+    }
+
+    if (error && error >= 500) {
+      toast.error("Something went wrong..! Please try again after some time..");
+    }
+    dispatch(setError(null));
+  }, [error, user]);
   const initialValues = {
     username: "",
     password: "",
   };
   const dispatch: TypeDispatch = useDispatch();
-  function handleLoginSubmit(userCredentials: IUserInformation) {
-    console.log(userCredentials);
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required("Username is required!"),
+    password: Yup.string().required("Password is required!"),
+  });
+  function handleLoginSubmit(
+    userCredentials: IUserInformation,
+    { resetForm }: FormikHelpers<IUserInformation>
+  ) {
     dispatch(userLogin(userCredentials));
+    resetForm();
   }
   return (
     <>
       <div className="h-[99vh] md:px-24 px-2">
         <Particle />
-
         <div className="text-white font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
           <Logo />
         </div>
@@ -41,6 +68,7 @@ function Login() {
                 <Formik
                   initialValues={initialValues}
                   onSubmit={handleLoginSubmit}
+                  validationSchema={validationSchema}
                 >
                   <Form className="w-full flex flex-col items-center gap-5 justify-center">
                     <BasicFormikInput name="username" placeholder="Username" />
@@ -49,9 +77,18 @@ function Login() {
                     <div className="mt-4">
                       <button
                         type="submit"
-                        className="bg-transparent text-primary border-primary border hover:bg-primary hover:text-black transition-colors w-28 h-9 text-lg font-bold rounded-lg tracking-wide"
+                        disabled={loading}
+                        className={`bg-transparent text-primary border-primary border  hover:text-black transition-colors w-28 h-9 text-lg font-bold rounded-lg tracking-wide flex items-center justify-center ${
+                          loading
+                            ? "opacity-50 cursor-not-allowed bg-transparent"
+                            : "hover:bg-primary"
+                        }`}
                       >
-                        Login
+                        {loading ? (
+                          <span className="animate-spin w-6 h-6 border-2 border-primary rounded-full border-t-transparent"></span>
+                        ) : (
+                          "Login"
+                        )}
                       </button>
                     </div>
                   </Form>
@@ -60,7 +97,7 @@ function Login() {
                 <div className="flex justify-center w-full mt-5">
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
-                      console.log(credentialResponse);
+                      dispatch(userOauthLogin(credentialResponse.credential));
                     }}
                     onError={() => {
                       console.log("Login Failed");

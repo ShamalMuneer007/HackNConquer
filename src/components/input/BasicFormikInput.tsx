@@ -6,6 +6,8 @@ import {
   FormikValues,
   useFormikContext,
 } from "formik";
+import React from "react";
+import { toast } from "react-toastify";
 
 export default function BasicFormikInput({
   name,
@@ -17,10 +19,20 @@ export default function BasicFormikInput({
     errors,
     touched,
   }: {
-    errors: FormikErrors<FormikValues>;
+    errors: FormikErrors<FormikValues> | any;
     touched: FormikTouched<FormikValues>;
   } = useFormikContext();
   const hasError = errors[name] && touched[name];
+  React.useEffect(() => {
+    if (hasError) {
+      setTimeout(() => {
+        toast.warn(errors[name], { autoClose: false, closeButton: false });
+      }, 400);
+    }
+    return () => {
+      toast.dismiss();
+    };
+  }, [errors, touched]);
   return (
     <div className="flex flex-col">
       <label>{title}</label>
@@ -32,23 +44,23 @@ export default function BasicFormikInput({
             {icon}
           </span>
         )}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center relative">
           <Field
             className={`${
-              hasError ? "border-2 border-red-700 " : "border border-gray-700"
+              hasError ? " placeholder:text-red-600 border-red-600" : ""
             }  ${
               icon ? "px-10" : "px-3"
-            } rounded-md h-10 placeholder:text-gray-600 w-[75%] bg-slate-400 md:w-96`}
+            } rounded-md placeholder:text-gray-600  h-10 border  w-[75%] border-gray-700 bg-slate-400 md:w-96`}
             name={name}
             placeholder={placeholder}
           />
-          <div className="w-96">
+          {/* <div className="w-96 absolute">
             <ErrorMessage
-              className="text-sm mt-2 text-red-500 font-semibold"
+              className="text-sm text-red-500 font-semibold"
               name={name}
               component="p"
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

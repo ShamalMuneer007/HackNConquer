@@ -1,8 +1,12 @@
-import { userLogin, userRegister } from "../actions/userActions";
+import {
+  userLogin,
+  userOauthLogin,
+  userRegister,
+} from "../actions/userActions";
 import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import { CustomJwtPayload } from "../../interfaces/CustomJwtPayload";
-import { getCookie, removeCookie } from "typescript-cookie";
+import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 const token = getCookie("userToken");
 let user = null;
 if (token) {
@@ -46,6 +50,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      //User Login reducers
       .addCase(userLogin.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -60,21 +65,48 @@ const userSlice = createSlice({
         state.user = null;
         state.error = action.payload;
       })
+      //user Oauth Login reducer
+      .addCase(userOauthLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(userOauthLogin.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = payload;
+        state.error = null;
+      })
+      .addCase(userOauthLogin.rejected, (state: any, action) => {
+        state.loading = false;
+        state.user = null;
+        state.error = action.payload;
+      })
+      //User Register Reducer
       .addCase(userRegister.pending, (state) => {
         state.loading = true;
         state.error = null;
-        console.log("pending");
       })
-      .addCase(userRegister.fulfilled, (state: any) => {
+      .addCase(userRegister.fulfilled, (state: any, { payload }: any) => {
+        const { accessToken, message } = payload;
         state.loading = false;
         state.error = null;
-        state.message = "user registered successfully";
-        console.log("success");
+        state.message = { message, status: 200 };
+        console.log("Register action fullfilled: ", payload);
+        if (!accessToken) {
+          state.user = null;
+          return;
+        }
+        const decodedJwt = jwtDecode<CustomJwtPayload>(accessToken);
+        setCookie("userToken", accessToken);
+        state.user = {
+          username: decodedJwt.sub,
+          role: decodedJwt.role,
+        };
+        console.log("Registration success");
       })
-      .addCase(userRegister.rejected, (state: any, action) => {
+      .addCase(userRegister.rejected, (state: any, { payload }) => {
         state.loading = false;
-        state.error = action.payload;
-        console.log("rejected");
+        state.error = payload;
+        console.log("Registration Rejected....", payload);
       });
   },
 });

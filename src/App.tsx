@@ -1,9 +1,11 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Signup from "./pages/Signup/Signup";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const user = useSelector((state: any) => state.user);
@@ -15,6 +17,7 @@ function App() {
   }, [user]);
   return (
     <>
+      <ToastContainer theme="dark" />
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
