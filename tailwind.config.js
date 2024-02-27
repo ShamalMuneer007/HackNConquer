@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+const withMT = require("@material-tailwind/react/utils/withMT");
+export default withMT({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "selector",
   theme: {
@@ -12,8 +13,8 @@ export default {
       textColor: ["dark"],
       colors: {
         dark: {
-          100: "#1a202c",
-          200: "#2d3748",
+          100: "#2d303d",
+          200: "#1a202c",
           300: "#4a5568",
           400: "#718096",
           500: "#a0aec0",
@@ -27,4 +28,4 @@ export default {
     },
   },
   plugins: [],
-};
+});

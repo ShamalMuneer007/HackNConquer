@@ -70,9 +70,7 @@ export const userOauthLogin = createAsyncThunk(
       if (error.response && error.response.status) {
         return rejectWithValue(error.response.status);
       } else {
-        return rejectWithValue(
-          "An error occurred while processing your request."
-        );
+        return rejectWithValue(error.message);
       }
     }
   }
@@ -92,23 +90,19 @@ export const userRegister = createAsyncThunk(
         userData,
         config
       );
-      console.log(response);
       if (response && response.data && response.data.error) {
         return rejectWithValue(response.data.error);
       }
       return response.data;
     } catch (error: any) {
-      console.log(error);
-      if (error.response.data) {
-        console.log(error.response);
+      console.error(error);
+      if (error.response && error.response.data) {
         return rejectWithValue({
           status: error.response.status,
           message: error.response.data.message,
         });
       } else {
-        return rejectWithValue(
-          "An error occurred while processing Registration request."
-        );
+        return rejectWithValue(error.message);
       }
     }
   }

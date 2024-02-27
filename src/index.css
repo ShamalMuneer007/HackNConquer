@@ -1,13 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:wght@100;300;400;500;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  box-sizing: border-box;
+::-webkit-scrollbar {
+  width: 7px; /* Width of the scrollbar */
 }
 
-.overflowHidden {
-  overflow-y: hidden;
+::-webkit-scrollbar-thumb {
+  background-color: #5bba0c; /* Color of the thumb */
+  border-radius: 6px; /* Radius of the thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Color of the track */
 }

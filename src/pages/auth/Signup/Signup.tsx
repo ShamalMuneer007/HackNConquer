@@ -32,17 +32,16 @@ function Signup() {
       setOtpModal(true);
       toast.info(message.message);
       dispatch(setMessage(null));
-    }
-    if (message && message.status === 200 && user !== null) {
+    } else if (message && message.status === 200 && user !== null) {
       setOtpModal(false);
-      toast.info(message.message);
       dispatch(setMessage(null));
     }
     if (error && error.status >= 400 && error.status <= 500) {
       toast.error(error.message);
-    }
-    if (error && error.status >= 500) {
+    } else if (error && error.status >= 500) {
       toast.error("Something went wrong..! Please try again after some time..");
+    } else if (error) {
+      toast.error(error);
     }
   }, [error, message]);
   const validationSchema = Yup.object().shape({
@@ -80,7 +79,7 @@ function Signup() {
           <Logo />
         </div>
         <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-slate-400 rounded-xl h-[85%] lg:h-[80%] lg:w-[40%] w-[70%]">
+          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-blue-gray-700 rounded-xl h-[85%] lg:h-[80%] lg:w-[40%] w-[70%]">
             <div className="flex flex-col">
               <div className="lg:ps-20 pt-20 mb-14 ">
                 <h2 className="text-white font-bold text-4xl text-center lg:text-left">

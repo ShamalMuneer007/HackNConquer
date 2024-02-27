@@ -31,7 +31,6 @@ const userSlice = createSlice({
   initialState: intialState,
   reducers: {
     logout: (state: any) => {
-      console.log("hello");
       removeCookie("userToken");
       state.loading = false;
       state.user = null;

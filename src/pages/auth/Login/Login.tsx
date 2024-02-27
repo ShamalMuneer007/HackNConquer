@@ -10,18 +10,22 @@ import { GoogleLogin } from "@react-oauth/google";
 import * as Yup from "yup";
 
 import Logo from "../../../components/Logo/Logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { setError } from "../../../redux/reducers/userSlice";
 
 function Login() {
   const { error, loading, user } = useSelector((state: any) => state.user);
+  const navigate = useNavigate();
   useEffect(() => {
     if (user) {
-      console.log(user);
-      toast("Sucessfull!");
+      user.role === "ROLE_ADMIN"
+        ? navigate("/admin/dashboard")
+        : navigate("/dashboard");
     }
+  }, [user]);
+  useEffect(() => {
     if (error && error === 401) {
       toast.error("Invalid username or password!", { position: "top-center" });
     } else if (error && error >= 400 && error < 500) {
@@ -57,7 +61,7 @@ function Login() {
           <Logo />
         </div>
         <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 bg-opacity-15 bg-slate-400 rounded-xl lg:h-[74%] h-[74%] lg:w-[40%] w-[70%]">
+          <div className="backdrop-blur-sm ms-20 bg-opacity-15 bg-blue-gray-600 rounded-xl lg:h-[74%] h-[74%] lg:w-[40%] w-[70%]">
             <div className="flex flex-col">
               <div className="lg:ps-20 pt-24 mb-14 ">
                 <h2 className="text-white font-bold text-4xl text-center lg:text-left">
