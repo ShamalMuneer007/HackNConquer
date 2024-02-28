@@ -1,5 +1,16 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shadcn/ui/select";
 import { Card, Textarea, Typography } from "@material-tailwind/react";
-function ProblemDetialsCard() {
+import { LANGUAGES as languages } from "@/constants/language";
+interface props {
+  setLanguage: (value: string) => void;
+}
+function ProblemDetialsCard({ setLanguage }: props) {
   return (
     <>
       <Card
@@ -39,26 +50,31 @@ function ProblemDetialsCard() {
             >
               Problem Difficulty
             </Typography>
-            <select className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
-              <option selected disabled>
-                Choose Difficulty
-              </option>
-              <option
-                value="easy"
-                className="text-green-600 font-bold text-lg "
-              >
-                Easy
-              </option>
-              <option
-                value="medium"
-                className="text-yellow-600 font-bold text-lg"
-              >
-                Medium
-              </option>
-              <option value="hard" className="text-red-600 font-bold text-lg">
-                Hard
-              </option>
-            </select>
+            <Select>
+              <SelectTrigger className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg  dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white">
+                <SelectValue placeholder="Difficulty" />
+              </SelectTrigger>
+              <SelectContent className="bg-black text-white border-none font-bold">
+                <SelectItem
+                  value="light"
+                  className="hover:bg-dark-100/60 text-green-600"
+                >
+                  Easy
+                </SelectItem>
+                <SelectItem
+                  value="dark"
+                  className="hover:bg-dark-100/60 text-yellow-600"
+                >
+                  Medium
+                </SelectItem>
+                <SelectItem
+                  value="system"
+                  className="hover:bg-dark-100/60 text-red-600"
+                >
+                  Hard
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="p-5">
             <Typography
@@ -69,20 +85,24 @@ function ProblemDetialsCard() {
             >
               Language
             </Typography>
-            <select className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
-              <option selected disabled>
-                Choose Language
-              </option>
-              <option value="js" className="font-bold text-lg ">
-                JavaScript
-              </option>
-              <option value="java" className="font-bold text-lg ">
-                Java
-              </option>
-              <option value="golang " className="font-bold text-lg ">
-                Golang
-              </option>
-            </select>
+            <div className="bg-black">
+              <Select onValueChange={(value) => setLanguage(value)}>
+                <SelectTrigger className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg  dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white">
+                  <SelectValue placeholder="Language" />
+                </SelectTrigger>
+                <SelectContent className="bg-black text-white border-none">
+                  {languages.map((language: string, index) => (
+                    <SelectItem
+                      key={index}
+                      value={language}
+                      className="hover:bg-dark-100/60"
+                    >
+                      {language}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       </Card>

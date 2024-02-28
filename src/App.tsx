@@ -10,7 +10,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminSidebar from "./components/admin/AdminSidebar";
 import UserSidebar from "./components/user/UserSidebar";
 import UserDashboard from "./pages/user/UserDashboard";
-import AdminProblems from "./components/admin/AdminProblems";
+import AdminProblems from "./pages/admin/AdminProblems";
 import AddProblem from "./pages/admin/AddProblem";
 
 function App() {
