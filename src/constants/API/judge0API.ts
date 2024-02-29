@@ -27,6 +27,7 @@ export const executeCode = async (
   const response = await API.post("/submissions", {
     language_id: languageId,
     source_code: btoa(sourceCode),
+    stdin: btoa("1 2 3 4 5"),
   });
   console.log(response);
   let result;

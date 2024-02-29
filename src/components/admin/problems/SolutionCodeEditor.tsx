@@ -1,19 +1,14 @@
-import { MAIN_SNIPPET } from "@/constants/language";
-import { TestCase } from "@/interfaces/TestCase";
-import { verifyProblem } from "@/redux/actions/adminAction";
-import { TypeDispatch } from "@/redux/store/store";
+import { executeCode } from "@/constants/API/judge0API";
+import { LANGUAGE_ID, MAIN_SNIPPET } from "@/constants/language";
 import Editor, { useMonaco } from "@monaco-editor/react";
 import { ReactNode, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 interface Props {
   setCode?: (value: any) => void;
   code?: string;
   language: string;
-  testCases: TestCase<String>[];
 }
-
-function MainCodeEditor({ testCases, language }: Props) {
+function SolutionCodeEditor({ language }: Props) {
   const [output, setOutput] = useState<ReactNode>(
     "Code output will be shown here!"
   );
@@ -37,27 +32,27 @@ function MainCodeEditor({ testCases, language }: Props) {
   const [executionLoading, setExecutionLoading] = useState(false);
   const [outError, setOutError] = useState(false);
   const editorRef = useRef<any>(null);
-  const dispatch: TypeDispatch = useDispatch();
   function handleEditorDidMount(editor: any) {
     editorRef.current = editor;
   }
-  async function runClickHandler() {
+  async function verifyHandler() {
     setOutError(false);
     setExecutionLoading(true);
     try {
       const sourceCode: string = editorRef.current?.getValue();
-      dispatch(verifyProblem({ sourceCode, testCases }));
-      // if (result.stdout && result.status_id === 3) {
-      //   setOutput(atob(result.stdout));
-      // } else if (result.stderr) {
-      //   setOutError(true);
-      //   setOutput(atob(result.stderr));
-      // } else if (result.status_id === 6 && result.compile_output) {
-      //   setOutError(true);
-      //   setOutput(atob(result.compile_output));
-      // } else {
-      //   setOutput(": [");
-      // }
+      const result = await executeCode(LANGUAGE_ID[language], sourceCode);
+      console.log(result);
+      if (result.stdout && result.status_id === 3) {
+        setOutput(atob(result.stdout));
+      } else if (result.stderr) {
+        setOutError(true);
+        setOutput(atob(result.stderr));
+      } else if (result.status_id === 6 && result.compile_output) {
+        setOutError(true);
+        setOutput(atob(result.compile_output));
+      } else {
+        setOutput(": [");
+      }
     } catch (error: any) {
       setOutput(": [");
       if (
@@ -80,7 +75,7 @@ function MainCodeEditor({ testCases, language }: Props) {
         <Editor
           height="50vh"
           width={"50%"}
-          language={language.toLowerCase()}
+          language={language}
           theme="my-theme"
           options={{
             minimap: {
@@ -120,7 +115,7 @@ function MainCodeEditor({ testCases, language }: Props) {
           className={`${
             !executionLoading ? "bg-primary" : "bg-transparent border-primary"
           } w-20 text-black font-bold rounded mt-4`}
-          onClick={runClickHandler}
+          onClick={verifyHandler}
         >
           {executionLoading ? (
             <div className="w-4 h-4 animate-spin rounded-full border-4 border-primary border-t-4 border-t-transparent"></div>
@@ -133,4 +128,4 @@ function MainCodeEditor({ testCases, language }: Props) {
   );
 }
 
-export default MainCodeEditor;
+export default SolutionCodeEditor;

@@ -7,14 +7,14 @@ import {
 } from "@/shadcn/ui/select";
 import { Card, Textarea, Typography } from "@material-tailwind/react";
 import { LANGUAGES as languages } from "@/constants/language";
-interface props {
+interface Props {
   setLanguage: (value: string) => void;
 }
-function ProblemDetialsCard({ setLanguage }: props) {
+function ProblemDetialsCard({ setLanguage }: Props) {
   return (
     <>
       <Card
-        className="h-[70vh] p-5 w-full bg-dark-200 py-4 shadow-xl shadow-blue-gray-900/5"
+        className="p-5 w-full bg-dark-200 py-4 shadow-xl shadow-blue-gray-900/5"
         placeholder=""
       >
         <div className="mb-5">
@@ -35,7 +35,7 @@ function ProblemDetialsCard({ setLanguage }: props) {
           <Textarea
             color="green"
             spellCheck="true"
-            className=" text-black font-bold border border-white"
+            className=" text-black font-bold border h-52 border-white"
             label="Description"
             style={{ color: "white", fontSize: "18px" }}
           />

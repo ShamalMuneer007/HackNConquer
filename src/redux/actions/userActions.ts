@@ -10,7 +10,7 @@ export const userLogin = createAsyncThunk(
   "user/userLogin",
   async (
     userCredentials: IUserInformation,
-    { rejectWithValue }: any
+    { rejectWithValue }
   ): Promise<any> => {
     try {
       const config = {
@@ -43,10 +43,7 @@ export const userLogin = createAsyncThunk(
 
 export const userOauthLogin = createAsyncThunk(
   "user/userOauthLogin",
-  async (
-    oauthToken: string | undefined,
-    { rejectWithValue }: any
-  ): Promise<any> => {
+  async (oauthToken: string | undefined, { rejectWithValue }): Promise<any> => {
     try {
       const config = {
         headers: {

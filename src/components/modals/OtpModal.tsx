@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-interface props {
+interface Props {
   setOtpModal: Function;
   userData: any;
   registerSubmit: Function;
 }
 
-function OtpModal({ setOtpModal, userData, registerSubmit }: props) {
+function OtpModal({ setOtpModal, userData, registerSubmit }: Props) {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const { loading } = useSelector((state: any) => state.user);
   const [retryTimer, setRetryTimer] = useState(30);

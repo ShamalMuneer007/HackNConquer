@@ -1,13 +1,8 @@
-import { Card, Textarea, Typography } from "@material-tailwind/react";
+import { useState } from "react";
 import ProblemDetialsCard from "../../components/admin/problems/ProblemDetialsCard";
-import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
-import * as monaco from "monaco-editor";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import MainCodeEditor from "@/components/admin/problems/MainCodeEditor";
+import ProblemCodeCard from "@/components/admin/problems/ProblemCodeCard";
 function AddProblem() {
-  const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("javascript");
-  const editorRef = useRef(null);
+  const [language, setLanguage] = useState("Javascript");
   return (
     <>
       <h1 className="text-white font-bold text-4xl">Problems</h1>
@@ -17,6 +12,7 @@ function AddProblem() {
 
       <div className="w-full pb-7">
         <ProblemDetialsCard setLanguage={setLanguage} />
+        <ProblemCodeCard language={language} />
       </div>
     </>
   );
