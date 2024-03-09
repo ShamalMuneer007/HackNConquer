@@ -10,21 +10,13 @@ import { GoogleLogin } from "@react-oauth/google";
 import * as Yup from "yup";
 
 import Logo from "../../../components/Logo/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { setError } from "../../../redux/reducers/userSlice";
 
 function Login() {
   const { error, loading, user } = useSelector((state: any) => state.user);
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (user) {
-      user.role === "ROLE_ADMIN"
-        ? navigate("/admin/dashboard")
-        : navigate("/dashboard");
-    }
-  }, [user]);
   useEffect(() => {
     if (error && error === 401) {
       toast.error("Invalid username or password!", { position: "top-center" });

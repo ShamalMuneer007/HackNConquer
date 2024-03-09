@@ -1,20 +1,24 @@
 import {
-  ErrorMessage,
   Field,
   FormikErrors,
   FormikTouched,
   FormikValues,
   useFormikContext,
 } from "formik";
-import React from "react";
+import React, { ReactNode } from "react";
 import { toast } from "react-toastify";
-
+interface Props {
+  name: string;
+  icon?: ReactNode;
+  title?: string;
+  placeholder?: string;
+}
 export default function BasicFormikInput({
   name,
   icon,
   title,
   placeholder,
-}: any) {
+}: Props) {
   const {
     errors,
     touched,
@@ -53,6 +57,7 @@ export default function BasicFormikInput({
             } rounded-md placeholder:text-gray-600  h-10 border  w-[75%] border-gray-700 bg-slate-400 md:w-96`}
             name={name}
             placeholder={placeholder}
+            type={name.toLowerCase().includes("password") ? "password" : "text"}
           />
           {/* <div className="w-96 absolute">
             <ErrorMessage

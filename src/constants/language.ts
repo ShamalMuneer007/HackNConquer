@@ -7,15 +7,18 @@ export const LANGUAGE_ID: { [key: string]: number } = {
   Python: 71,
 };
 export const MAIN_SNIPPET: { [key: string]: string } = {
-  Java: `import java.util.*;
+  Java: `
+  /*
+  Given below is a prdefined driver code for calculating the total sum of array of integers.
+  The predefined code consideres test case as an integer array
+  The soultion function defined here returns an integer...
+  Make changes accordingly to the problem !!!
+  */
+  
+  import java.util.*;
   
   public class Main {
     public static void main(String[] args) {
-      /*
-      The predefined code consideres test case as an integer array
-      The soultion function defined here return an integer...
-      Make changes accordingly to the problem 
-      */
      Scanner scanner = new Scanner(System.in);
      //Takes in input from api
      String inputString = scanner.nextLine();
@@ -39,7 +42,11 @@ export const MAIN_SNIPPET: { [key: string]: string } = {
       return sum;
     }
   }`,
-  Javascript: `const readline = require('readline');
+  Javascript: `
+  /* Given below is a prdefined driver code for calculating the total sum of array of integers.
+  Make changes to the code accordingly to your problem!!! */
+  
+  const readline = require('readline');
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -67,7 +74,14 @@ export const MAIN_SNIPPET: { [key: string]: string } = {
     rl.close();
   });
   `,
-  Go: `package main
+  Go: `
+  /*
+  Given below is a prdefined driver code for calculating the total sum of array of integers.
+  The predefined code consideres test case as an integer array
+  The soultion function defined here returns an integer...
+  Make changes accordingly to the problem !!!
+  */
+  package main
 
   import (
     "fmt"
@@ -90,7 +104,7 @@ export const MAIN_SNIPPET: { [key: string]: string } = {
   func main() {
     // Takes in input from api
     reader := bufio.NewReader(os.Stdin)
-    inputString,_ := reader.ReadString("\\n")
+    inputString,_ := reader.ReadString('\\n')
     // Split the input string into an array of strings
     arrayString := strings.Split(inputString, " ")
   

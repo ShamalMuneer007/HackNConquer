@@ -1,4 +1,5 @@
-export interface TestCase<T> {
-  input: T;
-  output: T;
+export interface TestCase {
+  testCaseInput: string;
+  expectedOutput: string;
+  idx: number;
 }

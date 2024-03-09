@@ -7,10 +7,19 @@ import {
 } from "@/shadcn/ui/select";
 import { Card, Textarea, Typography } from "@material-tailwind/react";
 import { LANGUAGES as languages } from "@/constants/language";
+import { Dispatch, SetStateAction } from "react";
+import { IProblemDetails } from "@/interfaces/IProblemDetails";
+
 interface Props {
   setLanguage: (value: string) => void;
+  problemDetails: IProblemDetails;
+  setProblemDetails: Dispatch<SetStateAction<IProblemDetails>>;
 }
-function ProblemDetialsCard({ setLanguage }: Props) {
+function ProblemDetialsCard({
+  setLanguage,
+  problemDetails,
+  setProblemDetails,
+}: Props) {
   return (
     <>
       <Card
@@ -26,7 +35,16 @@ function ProblemDetialsCard({ setLanguage }: Props) {
           <Typography variant="lead" color="white" className="" placeholder="">
             Problem Name
           </Typography>
-          <input className="bg-transparent focus:outline-none  focus:border-none border-white border focus:outline-green-800 h-5 w-60 rounded text-lg text-white p-5 font-bold"></input>
+          <input
+            className="bg-transparent focus:outline-none  focus:border-none border-white border focus:outline-green-800 h-5 w-60 rounded text-lg text-white p-5 font-bold"
+            value={problemDetails.name}
+            onChange={(e) =>
+              setProblemDetails((problemDetails) => ({
+                ...problemDetails,
+                name: e.target.value,
+              }))
+            }
+          ></input>
         </div>
         <div className="p-5">
           <Typography variant="lead" color="white" className="" placeholder="">
@@ -35,6 +53,13 @@ function ProblemDetialsCard({ setLanguage }: Props) {
           <Textarea
             color="green"
             spellCheck="true"
+            value={problemDetails.description}
+            onChange={(e) =>
+              setProblemDetails((problemDetails) => ({
+                ...problemDetails,
+                description: e.target.value,
+              }))
+            }
             className=" text-black font-bold border h-52 border-white"
             label="Description"
             style={{ color: "white", fontSize: "18px" }}
@@ -50,7 +75,15 @@ function ProblemDetialsCard({ setLanguage }: Props) {
             >
               Problem Difficulty
             </Typography>
-            <Select>
+            <Select
+              onValueChange={(value) =>
+                setProblemDetails(
+                  (problemDetails: IProblemDetails): IProblemDetails => {
+                    return { ...problemDetails, difficulty: value };
+                  }
+                )
+              }
+            >
               <SelectTrigger className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg  dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white">
                 <SelectValue placeholder="Difficulty" />
               </SelectTrigger>
@@ -88,7 +121,7 @@ function ProblemDetialsCard({ setLanguage }: Props) {
             <div className="bg-black">
               <Select onValueChange={(value) => setLanguage(value)}>
                 <SelectTrigger className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg  dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white">
-                  <SelectValue placeholder="Language" />
+                  <SelectValue placeholder={"Javascript"} />
                 </SelectTrigger>
                 <SelectContent className="bg-black text-white border-none">
                   {languages.map((language: string, index) => (

@@ -36,8 +36,30 @@ function App() {
       <ToastContainer theme="dark" />
       <Routes>
         {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />}></Route>
+        <Route
+          path="/login"
+          element={
+            !user ? (
+              <Login />
+            ) : user.role === "ROLE_ADMIN" ? (
+              <Navigate to="/admin/dashboard" />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            !user ? (
+              <Signup />
+            ) : user.role === "ROLE_ADMIN" ? (
+              <Navigate to="/admin/dashboard" />
+            ) : (
+              <Navigate to="/user/dashboard" />
+            )
+          }
+        ></Route>
 
         {/* Admin Routes */}
         <Route

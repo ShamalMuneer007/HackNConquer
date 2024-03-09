@@ -1,10 +1,9 @@
-interface TestCase<T> {
-  input: T;
-  output: T;
-}
+import { TestCase } from "@/interfaces/TestCase";
+import { FaTrash } from "react-icons/fa6";
+
 interface Props {
-  testCases: TestCase<string>[];
-  setTestCases: (testCases: TestCase<string>[]) => void;
+  testCases: TestCase[];
+  setTestCases: (testCases: TestCase[]) => void;
 }
 export default function TestCases({ testCases, setTestCases }: Props) {
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -15,7 +14,17 @@ export default function TestCases({ testCases, setTestCases }: Props) {
 
   const handleAddRow = () => {
     if (testCases.length !== 30)
-      setTestCases([...testCases, { input: "", output: "" }]);
+      setTestCases([
+        ...testCases,
+        {
+          testCaseInput: "",
+          expectedOutput: "",
+          idx: testCases[testCases.length - 1].idx + 1,
+        },
+      ]);
+  };
+  const handleRemoveButton = (idx: number) => {
+    setTestCases(testCases.filter((testCase) => testCase.idx !== idx));
   };
 
   return (
@@ -30,40 +39,58 @@ export default function TestCases({ testCases, setTestCases }: Props) {
           </thead>
           <tbody>
             {testCases.map((testCase, index) => (
-              <tr key={index}>
+              <tr key={testCase.idx}>
                 <td className="relative">
                   <span className="absolute -left-7">{index + 1}</span>
                   <input
                     type="text"
+                    disabled={testCases.length - 1 !== index}
                     className="bg-dark-100 w-96 text-white p-2"
-                    value={testCase.input}
+                    value={testCase.testCaseInput}
                     onChange={(e) =>
-                      handleInputChange(index, "input", e.target.value)
+                      handleInputChange(index, "testCaseInput", e.target.value)
                     }
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    value={testCase.output}
+                    disabled={testCases.length - 1 !== index}
+                    value={testCase.expectedOutput}
                     className="bg-dark-100 w-96 text-white p-2"
                     onChange={(e) =>
-                      handleInputChange(index, "output", e.target.value)
+                      handleInputChange(index, "expectedOutput", e.target.value)
                     }
                   />
                 </td>
+                {testCases.length > 1 && (
+                  <td>
+                    <button
+                      type="button"
+                      className="bg-transparent ps-4 hover:text-red-700 transition-colors text-white p-2"
+                      onClick={() => handleRemoveButton(testCase.idx)}
+                    >
+                      <span className="text-md">
+                        <FaTrash />
+                      </span>
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className="flex justify-center">
-        <button
-          className="text-primary transition-colors m-3 p-1 w-32 rounded border-primary border hover:bg-primary hover:text-black"
-          onClick={handleAddRow}
-        >
-          Add test case
-        </button>
+        {testCases[testCases.length - 1]["testCaseInput"] != "" &&
+          testCases[testCases.length - 1]["expectedOutput"] != "" && (
+            <button
+              className="text-primary transition-colors m-3 p-1 w-32 rounded border-primary border hover:bg-primary hover:text-black"
+              onClick={handleAddRow}
+            >
+              Add test case
+            </button>
+          )}
       </div>
     </>
   );

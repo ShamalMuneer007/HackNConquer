@@ -3,12 +3,19 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 7px; /* Width of the scrollbar */
+  width: 7px;
+  height: 100%; /* Width of the scrollbar */
 }
-
+::-webkit-scrollbar-corner {
+  display: none;
+  margin: 0;
+  padding: 0;
+  height: 0;
+}
 ::-webkit-scrollbar-thumb {
   background-color: #5bba0c; /* Color of the thumb */
-  border-radius: 6px; /* Radius of the thumb */
+  border-radius: 6px;
+  border: 2px solid transparent; /* Radius of the thumb */
 }
 
 ::-webkit-scrollbar-track {

@@ -7,16 +7,22 @@ import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import { CustomJwtPayload } from "../../interfaces/CustomJwtPayload";
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
+
 const token = getCookie("userToken");
 let user = null;
 if (token) {
   const decoded = jwtDecode<CustomJwtPayload>(token);
   const role = decoded.role;
   const username = decoded.sub;
-  user = {
-    username: username,
-    role: role,
-  };
+  if (decoded.exp * 1000 < Date.now()) {
+    console.log("Unauthorized request!");
+    removeCookie("userToken");
+  } else {
+    user = {
+      username: username,
+      role: role,
+    };
+  }
 }
 
 const intialState = {
