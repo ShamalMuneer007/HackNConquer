@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import ProblemDetialsCard from "../../components/admin/problems/ProblemDetialsCard";
+import * as Yup from "yup";
 import ProblemCodeCard from "@/components/admin/problems/ProblemCodeCard";
 import { TestCase } from "@/interfaces/TestCase";
 import { IProblemDetails } from "@/interfaces/IProblemDetails";
 import { MAIN_SNIPPET } from "@/constants/language";
 import AddProblemModal from "@/components/admin/modals/AddProblemModal";
+import { Form, Formik } from "formik";
 function AddProblem() {
-  const initialProblemState = {
+  const initialProblemState: IProblemDetails = {
     name: "",
     description: "",
     difficulty: "",
@@ -27,12 +29,24 @@ function AddProblem() {
       document.body.style.overflow = "visible";
     }
   }, [modal]);
-
+  const problemDetailsValidationSchema = Yup.object().shape({
+    name: Yup.string()
+      .required("Problem name is required!")
+      .min(5, "Minimum 5 characters is required"),
+    description: Yup.string()
+      .required("Problem Description is required!")
+      .min(10, "Atleast 10 characters is required for problem description"),
+    difficulty: Yup.string().required("Please select a difficulty"),
+  });
+  const handleAddProblemSubmission = (value: IProblemDetails) => {
+    setModal(true);
+  };
   return (
     <>
       {modal && (
         <AddProblemModal
           language={language}
+          setDriverCode={setDriverCode}
           driverCode={driverCode}
           setModal={setModal}
         />
@@ -43,18 +57,28 @@ function AddProblem() {
       </h3>
 
       <div className="w-full pb-7">
-        <ProblemDetialsCard
-          problemDetails={problemDetails}
-          setProblemDetails={setProblemDetails}
-          setLanguage={setLanguage}
-        />
-        <ProblemCodeCard
-          setModal={setModal}
-          setDriverCode={setDriverCode}
-          language={language}
-          testCases={testCases}
-          setTestCases={setTestCases}
-        />
+        <Formik
+          initialValues={initialProblemState}
+          onSubmit={handleAddProblemSubmission}
+          validationSchema={problemDetailsValidationSchema}
+        >
+          <Form>
+            <ProblemDetialsCard
+              problemDetails={problemDetails}
+              setProblemDetails={setProblemDetails}
+              setLanguage={setLanguage}
+            />
+
+            <ProblemCodeCard
+              problemDetails={problemDetails}
+              handleAddProblemSubmission={handleAddProblemSubmission}
+              setDriverCode={setDriverCode}
+              language={language}
+              testCases={testCases}
+              setTestCases={setTestCases}
+            />
+          </Form>
+        </Formik>
       </div>
     </>
   );

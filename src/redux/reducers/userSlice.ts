@@ -7,6 +7,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import { CustomJwtPayload } from "../../interfaces/CustomJwtPayload";
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
+import { store } from "../store/store";
 
 const token = getCookie("userToken");
 let user = null;

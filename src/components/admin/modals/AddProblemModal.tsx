@@ -1,5 +1,12 @@
 import { Editor } from "@monaco-editor/react";
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import DriverCodeEditor from "../problems/DriverCodeEditor";
 
 function AiOutlineCloseCircle(props: any) {
   return (
@@ -19,48 +26,95 @@ function AiOutlineCloseCircle(props: any) {
 }
 interface AddProblemModalProps {
   setModal: Dispatch<SetStateAction<boolean>>;
+  setDriverCode: Dispatch<SetStateAction<string>>;
   driverCode: string;
   language: string;
 }
 function AddProblemModal({
   setModal,
   driverCode,
+  setDriverCode,
   language,
 }: AddProblemModalProps) {
+  const [secondStep, setSecondStep] = useState(false);
   const editorRef = useRef<any>(null);
-  function handleEditorDidMount(editor: any) {
+  const handleEditorDidMount = (editor: any) => {
     editorRef.current = editor;
-  }
+  };
+  const nextButtonHandler = () => {
+    setDriverCode(editorRef.current?.getValue());
+    setSecondStep(true);
+  };
   return (
     <div className="bg-black/20 h-screen w-screen backdrop-blur-sm shadow-md fixed z-50 inset-0 overflow-hidden">
       <div className="flex h-full w-full justify-center items-center">
-        <div className="h-[90%] w-[60%] bg-dark-100 relative rounded text-white overflow-x-scroll">
-          <div className="flex justify-center items-center h-full">
-            <Editor
-              height="60vh"
-              width={"90%"}
-              language={language.toLowerCase()}
-              theme="my-theme"
-              options={{
-                minimap: {
-                  enabled: false,
-                },
-                fontSize: 16,
-                padding: { top: 25 },
-                cursorStyle: "line",
-                wordWrap: "on",
-              }}
-              value={driverCode}
-              onMount={handleEditorDidMount}
-            />
+        <div className="h-[90%] w-[60%] bg-dark-100 relative rounded text-white overflow-y-hidden">
+          <div className=" p-6">
+            {!secondStep ? (
+              <>
+                <h2 className="font-bold text-2xl">Driver Code</h2>
+                <p className="font-semibold text-lg px-8 pt-5">
+                  <img
+                    className="inline mx-5"
+                    width="34"
+                    height="34"
+                    src="https://img.icons8.com/emoji/48/warning-emoji.png"
+                    alt="warning-emoji"
+                  />
+                  Remove the solution function / class of the problem in the
+                  code before proceeding{" "}
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="font-bold text-2xl">Solution Template</h2>
+                <p className="font-semibold text-lg px-8 pt-5">
+                  <img
+                    className="inline mx-5"
+                    width="34"
+                    height="34"
+                    src="https://img.icons8.com/emoji/48/warning-emoji.png"
+                    alt="warning-emoji"
+                  />
+                  Create a solution template function for the user to code in it{" "}
+                </p>
+              </>
+            )}
           </div>
+          {secondStep ? (
+            <DriverCodeEditor
+              handleEditorDidMount={handleEditorDidMount}
+              language={language}
+              driverCode={driverCode}
+            />
+          ) : (
+            <DriverCodeEditor
+              driverCode={driverCode}
+              handleEditorDidMount={handleEditorDidMount}
+              language={language}
+            />
+          )}
           <div className="flex justify-end sticky gap-6 bottom-0 bg-dark-200 h-20 items-center pe-6">
-            <button className="border-primary border w-20 h-10 rounded-xl   text-primary hover:bg-primary hover:text-black">
-              Next
-            </button>
+            {!secondStep ? (
+              <button
+                className="border-primary border transition-colors w-20 h-10 rounded-xl   text-primary hover:bg-primary hover:text-black"
+                onClick={() => {
+                  nextButtonHandler();
+                }}
+              >
+                Next
+              </button>
+            ) : (
+              <button className="border-primary border transition-colors w-32 h-10 rounded-xl   text-primary hover:bg-primary hover:text-black">
+                Add Problem
+              </button>
+            )}
             <button
               className="text-red-600 px-3 w-20 h-10  rounded-xl py-2 border-red-600 border hover:bg-red-600 transition-colors hover:text-white"
-              onClick={() => setModal(false)}
+              onClick={() => {
+                setSecondStep(false);
+                setModal(false);
+              }}
             >
               Cancel
             </button>
