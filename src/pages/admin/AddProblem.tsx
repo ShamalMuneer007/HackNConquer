@@ -4,31 +4,29 @@ import * as Yup from "yup";
 import ProblemCodeCard from "@/components/admin/problems/ProblemCodeCard";
 import { TestCase } from "@/interfaces/TestCase";
 import { IProblemDetails } from "@/interfaces/IProblemDetails";
-import { MAIN_SNIPPET } from "@/constants/language";
+import { LANGUAGE_ID, MAIN_SNIPPET } from "@/constants/language";
 import AddProblemModal from "@/components/admin/modals/AddProblemModal";
 import { Form, Formik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { ProblemDetails, addProblem } from "@/redux/actions/adminAction";
+import { TypeDispatch } from "@/redux/store/store";
+import { toast } from "react-toastify";
+import AdminLoading from "@/components/admin/AdminLoading";
+import { useNavigate } from "react-router-dom";
+
+interface IFinalCode {
+  originalCode: string;
+  driverCode: string;
+  solutionTemplate: string;
+}
+
 function AddProblem() {
   const initialProblemState: IProblemDetails = {
     name: "",
     description: "",
     difficulty: "",
+    categories: [""],
   };
-  const [language, setLanguage] = useState("Javascript");
-  const [problemDetails, setProblemDetails] =
-    useState<IProblemDetails>(initialProblemState);
-  const [testCases, setTestCases] = useState<TestCase[]>([
-    { testCaseInput: "", expectedOutput: "", idx: 1 },
-  ]);
-  const [driverCode, setDriverCode] = useState<string>(MAIN_SNIPPET[language]);
-  const [modal, setModal] = useState(false);
-
-  useEffect(() => {
-    if (modal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "visible";
-    }
-  }, [modal]);
   const problemDetailsValidationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Problem name is required!")
@@ -37,20 +35,73 @@ function AddProblem() {
       .required("Problem Description is required!")
       .min(10, "Atleast 10 characters is required for problem description"),
     difficulty: Yup.string().required("Please select a difficulty"),
+    categories: Yup.array()
+      .of(Yup.string())
+      .min(1, "At least one category must be selected"),
   });
-  const handleAddProblemSubmission = (value: IProblemDetails) => {
-    setModal(true);
+  const dispatch: TypeDispatch = useDispatch();
+  const { error, response } = useSelector((state: any) => state.admin);
+  const [language, setLanguage] = useState("Javascript");
+  const [testCases, setTestCases] = useState<TestCase[]>([
+    { testCaseInput: "", expectedOutput: "", idx: 1 },
+  ]);
+  const [code, setCode] = useState<IFinalCode>({
+    originalCode: MAIN_SNIPPET[language],
+    driverCode: MAIN_SNIPPET[language],
+    solutionTemplate: "",
+  });
+  const navigate = useNavigate();
+  const [modal, setModal] = useState(false);
+
+  useEffect(() => {
+    console.log("CODE : ", code);
+  }, [code]);
+  useEffect(() => {
+    if (modal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  }, [modal]);
+
+  useEffect(() => {
+    if (error && error.status >= 500 && error.status < 600) {
+      toast.error("Sometnhing went wrong on our side... Please try again !");
+      console.error(error);
+    }
+  }, [error]);
+  useEffect(() => {
+    console.log("Response", response);
+    if (response && response.status === 200) {
+      toast.success("Problem added successfully", { position: "top-center" });
+      navigate("/admin/problems");
+    }
+  }, [response]);
+
+  const handleFormSubmission = (problemDetails: IProblemDetails) => {
+    console.log(problemDetails);
+    const addProblemSubmissionData: ProblemDetails = {
+      problemName: problemDetails.name,
+      description: problemDetails.description,
+      driverCode: code.driverCode,
+      testCases: testCases,
+      solutionTemplate: code.solutionTemplate,
+      categories: problemDetails.categories,
+      languageId: LANGUAGE_ID[language],
+      difficulty: problemDetails.difficulty,
+    };
+    if (addProblemSubmissionData.solutionTemplate.length < 5) {
+      toast.error("Please add a valid solution template !!", {
+        position: "top-center",
+      });
+      return;
+    }
+    dispatch(addProblem(addProblemSubmissionData));
   };
+
   return (
-    <>
-      {modal && (
-        <AddProblemModal
-          language={language}
-          setDriverCode={setDriverCode}
-          driverCode={driverCode}
-          setModal={setModal}
-        />
-      )}
+    <div className="page-padding">
+      <AdminLoading />
       <h1 className="text-white font-bold text-4xl">Problems</h1>
       <h3 className="text mt-8 mb-2 font-semibold text-2xl text-primary">
         Add problem
@@ -59,28 +110,31 @@ function AddProblem() {
       <div className="w-full pb-7">
         <Formik
           initialValues={initialProblemState}
-          onSubmit={handleAddProblemSubmission}
+          onSubmit={handleFormSubmission}
           validationSchema={problemDetailsValidationSchema}
         >
           <Form>
-            <ProblemDetialsCard
-              problemDetails={problemDetails}
-              setProblemDetails={setProblemDetails}
-              setLanguage={setLanguage}
-            />
-
+            <ProblemDetialsCard setLanguage={setLanguage} />
             <ProblemCodeCard
-              problemDetails={problemDetails}
-              handleAddProblemSubmission={handleAddProblemSubmission}
-              setDriverCode={setDriverCode}
+              setModal={setModal}
+              setCode={setCode}
               language={language}
               testCases={testCases}
               setTestCases={setTestCases}
             />
+            {modal && (
+              <AddProblemModal
+                language={language}
+                setCode={setCode}
+                code={code}
+                setModal={setModal}
+                handleFormSubmission={handleFormSubmission}
+              />
+            )}
           </Form>
         </Formik>
       </div>
-    </>
+    </div>
   );
 }
 

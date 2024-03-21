@@ -75,13 +75,13 @@ function Signup() {
             setOtpModal={setOtpModal}
           />
         )}
-        <div className="text-white font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
+        <div className="text-white lg:block hidden font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
           <Logo />
         </div>
         <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-blue-gray-700 rounded-xl h-[85%] lg:h-[80%] lg:w-[40%] w-[70%]">
+          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-blue-gray-800 rounded-xl py-16 lg:w-[40%] w-[70%]">
             <div className="flex flex-col">
-              <div className="lg:ps-20 pt-20 mb-14 ">
+              <div className="lg:ps-20 mb-12 ">
                 <h2 className="text-white font-bold text-4xl text-center lg:text-left">
                   Sign up
                 </h2>
@@ -120,7 +120,7 @@ function Signup() {
                     </div>
                   </Form>
                 </Formik>
-                <p className="text-white w-full text-center pt-4 lg:pt-9">OR</p>
+                <p className="text-white w-full text-center pt-2 lg:pt-4">OR</p>
                 <div className="flex justify-center w-full mt-5">
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
@@ -131,6 +131,7 @@ function Signup() {
                     }}
                     useOneTap
                     text="continue_with"
+                    shape="circle"
                   />
                 </div>
                 <div className="text-white text-md pt-5 lg:hidden relative flex  justify-center">

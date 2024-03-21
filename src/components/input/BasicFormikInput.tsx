@@ -38,7 +38,7 @@ export default function BasicFormikInput({
     };
   }, [errors, touched]);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <label>{title}</label>
       <div className="flex align-middle">
         {icon && (
@@ -48,13 +48,13 @@ export default function BasicFormikInput({
             {icon}
           </span>
         )}
-        <div className="flex flex-col items-center relative">
+        <div className="flex flex-col items-center relative w-full">
           <Field
             className={`${
-              hasError ? " placeholder:text-red-600 border-red-600" : ""
+              hasError ? "  border-red-600 shadow-sm shadow-red-600" : ""
             }  ${
               icon ? "px-10" : "px-3"
-            } rounded-md placeholder:text-gray-600  h-10 border  w-[75%] border-gray-700 bg-slate-400 md:w-96`}
+            } rounded-md placeholder:text-gray-600  h-10 border text-white  w-[75%] border-gray-700 bg-slate-400 md:w-[65%] bg-black/20`}
             name={name}
             placeholder={placeholder}
             type={name.toLowerCase().includes("password") ? "password" : "text"}

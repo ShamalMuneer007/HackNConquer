@@ -49,18 +49,18 @@ function Login() {
     <>
       <div className="h-[99vh] md:px-24 px-2">
         <Particle />
-        <div className="text-white font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
+        <div className="text-white lg:block hidden font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
           <Logo />
         </div>
         <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 bg-opacity-15 bg-blue-gray-600 rounded-xl lg:h-[74%] h-[74%] lg:w-[40%] w-[70%]">
+          <div className="backdrop-blur-sm ms-20 bg-opacity-15 bg-blue-gray-800 rounded-xl py-16 lg:w-[40%] w-[70%]">
             <div className="flex flex-col">
-              <div className="lg:ps-20 pt-24 mb-14 ">
+              <div className="lg:ps-20 mb-12 ">
                 <h2 className="text-white font-bold text-4xl text-center lg:text-left">
                   Sign in
                 </h2>
               </div>
-              <div className="items-center h-full">
+              <div className="items-center h-full mt-10">
                 <Formik
                   initialValues={initialValues}
                   onSubmit={handleLoginSubmit}
@@ -70,7 +70,7 @@ function Login() {
                     <BasicFormikInput name="username" placeholder="Username" />
                     <BasicFormikInput name="password" placeholder="Password" />
                     <div></div>
-                    <div className="mt-4">
+                    <div className="mt-2">
                       <button
                         type="submit"
                         disabled={loading}
@@ -89,7 +89,7 @@ function Login() {
                     </div>
                   </Form>
                 </Formik>
-                <p className="text-white w-full text-center pt-9">OR</p>
+                <p className="text-white w-full text-center pt-2 lg:pt-4">OR</p>
                 <div className="flex justify-center w-full mt-5">
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
@@ -99,6 +99,7 @@ function Login() {
                       console.log("Login Failed");
                     }}
                     useOneTap
+                    shape="circle"
                   />
                 </div>
                 <div className="text-white text-md pt-5 lg:hidden relative flex  justify-center">

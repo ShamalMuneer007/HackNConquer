@@ -1,19 +1,30 @@
 import { Editor } from "@monaco-editor/react";
-import React from "react";
+
 interface Props {
   language: string;
-  driverCode?: string;
   handleEditorDidMount: (editor: any) => void;
+  initialValue?: string;
+  setCode?: any;
+  secondStep?: boolean;
 }
+
 function DriverCodeEditor({
   language,
-  driverCode,
   handleEditorDidMount,
+  initialValue,
+  secondStep,
+  setCode,
 }: Props) {
   return (
     <div className="w-full h-full">
       <div className="flex justify-center h-full">
         <Editor
+          onChange={(e) => {
+            setCode((code: any) => ({
+              ...code,
+              [secondStep ? "solutionTemplate" : "driverCode"]: e,
+            }));
+          }}
           height="70%"
           width={"90%"}
           language={language.toLowerCase()}
@@ -27,7 +38,7 @@ function DriverCodeEditor({
             cursorStyle: "line",
             wordWrap: "on",
           }}
-          value={driverCode}
+          value={initialValue}
           onMount={handleEditorDidMount}
         />
       </div>

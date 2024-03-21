@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.page-padding {
+  @apply px-24 py-24;
+}
 ::-webkit-scrollbar {
   width: 7px;
   height: 100%; /* Width of the scrollbar */

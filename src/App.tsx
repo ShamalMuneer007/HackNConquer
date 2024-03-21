@@ -7,11 +7,15 @@ import { useSelector } from "react-redux";
 import Signup from "./pages/auth/Signup/Signup";
 import { ToastContainer } from "react-toastify";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminSidebar from "./components/admin/AdminSidebar";
-import UserSidebar from "./components/user/UserSidebar";
+import AdminNavbar from "./components/navbar/AdminNavbar";
+import UserSidebar from "./components/navbar/UserSidebar";
 import UserDashboard from "./pages/user/UserDashboard";
 import AdminProblems from "./pages/admin/AdminProblems";
 import AddProblem from "./pages/admin/AddProblem";
+import AddCategory from "./pages/admin/AddCategory";
+import ProblemDetails from "./pages/admin/ProblemDetails";
+import Users from "./pages/admin/Users";
+import AdminCategories from "./pages/admin/AdminCategories";
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -42,9 +46,9 @@ function App() {
             !user ? (
               <Login />
             ) : user.role === "ROLE_ADMIN" ? (
-              <Navigate to="/admin/dashboard" />
+              <Navigate to="/admin" />
             ) : (
-              <Navigate to="/dashboard" />
+              <Navigate to="/" />
             )
           }
         />
@@ -64,11 +68,15 @@ function App() {
         {/* Admin Routes */}
         <Route
           path="/admin"
-          element={<AdminProtectedRoute element={<AdminSidebar />} />}
+          element={<AdminProtectedRoute element={<AdminNavbar />} />}
         >
           <Route
-            path="dashboard"
+            index
             element={<AdminProtectedRoute element={<AdminDashboard />} />}
+          ></Route>
+          <Route
+            path="users"
+            element={<AdminProtectedRoute element={<Users />} />}
           ></Route>
           <Route
             path="problems"
@@ -78,12 +86,25 @@ function App() {
             path="problems/add-problem"
             element={<AdminProtectedRoute element={<AddProblem />} />}
           ></Route>
+          <Route
+            path="problems/problem-details/:problemId"
+            element={<AdminProtectedRoute element={<ProblemDetails />} />}
+          ></Route>
+          <Route
+            path="categories"
+            element={<AdminProtectedRoute element={<AdminCategories />} />}
+          ></Route>
+
+          <Route
+            path="categories/add-category"
+            element={<AdminProtectedRoute element={<AddCategory />} />}
+          ></Route>
         </Route>
 
         {/* User Routes */}
         <Route path="/" element={<ProtectedRoute element={<UserSidebar />} />}>
           <Route
-            path="dashboard"
+            index
             element={<ProtectedRoute element={<UserDashboard />} />}
           ></Route>
         </Route>

@@ -2,7 +2,6 @@ import { Card } from "@material-tailwind/react";
 import TestCases from "./TestCases";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { TestCase } from "@/interfaces/TestCase";
-import { IProblemDetails } from "@/interfaces/IProblemDetails";
 import { TypeDispatch } from "@/redux/store/store";
 import { Editor, useMonaco } from "@monaco-editor/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,35 +11,34 @@ import { toast } from "react-toastify";
 import { LANGUAGE_ID, MAIN_SNIPPET } from "@/constants/language";
 import { verifyProblem } from "@/redux/actions/adminAction";
 import ProblemConsole from "@/components/problem/ProblemConsole";
-import {
-  FormikErrors,
-  FormikTouched,
-  FormikValues,
-  useFormikContext,
-} from "formik";
+import { useFormikContext } from "formik";
 interface Props {
   language: string;
   testCases: TestCase[];
   setTestCases: Dispatch<SetStateAction<TestCase[]>>;
-  setDriverCode: Dispatch<SetStateAction<string>>;
-  handleAddProblemSubmission: (value: IProblemDetails) => void;
-  problemDetails: IProblemDetails;
+  setCode: Dispatch<SetStateAction<IFinalCode>>;
+  setModal: Dispatch<SetStateAction<boolean>>;
 }
-
+interface IFinalCode {
+  originalCode: string;
+  driverCode: string;
+  solutionTemplate: string;
+}
 function ProblemCodeCard({
   language,
   testCases,
   setTestCases,
-  setDriverCode,
-  handleAddProblemSubmission,
-  problemDetails,
+  setCode,
+  setModal,
 }: Props) {
-  const { loading, error, result } = useSelector((state: any) => state.admin);
+  const { error, result } = useSelector((state: any) => state.admin);
+  const formik = useFormikContext();
   const initialOutputMessage = "Your output will be shown here..";
   const [outputMessage, setOutputMessage] = useState(initialOutputMessage);
   const [outError, setOutError] = useState(false);
   const [testCaseValidated, setTestCaseValidated] = useState(false);
   const [reportRender, setReportRender] = useState<JSX.Element | null>(null);
+  const [verificationLoading, setVerificationLoading] = useState(false);
   const monaco = useMonaco();
   const dispatch: TypeDispatch = useDispatch();
   const editorRef = useRef<any>(null);
@@ -54,6 +52,7 @@ function ProblemCodeCard({
     setReportRender(null);
     setOutputMessage(initialOutputMessage);
     if (result) {
+      setVerificationLoading(false);
       console.log(result);
       const reportElement = <ProblemConsole result={result} />;
       setReportRender(reportElement);
@@ -70,6 +69,7 @@ function ProblemCodeCard({
   }, [result]);
   useEffect(() => {
     if (error) {
+      setVerificationLoading(false);
       dispatch(setResult(null));
       if (error.status === "COMPILE_ERR" || error.status === "STD_ERR") {
         setOutError(true);
@@ -109,14 +109,16 @@ function ProblemCodeCard({
       setOutputMessage("Test cases can't be empty!!!");
       return;
     }
-    const driverCode: string = editorRef.current?.getValue();
-    setDriverCode(driverCode);
+    const originalCode: string = editorRef.current?.getValue();
+    const driverCode: string = originalCode;
+    setCode((code) => ({ ...code, originalCode, driverCode }));
     console.log(testCases);
     const verificationSubmissionData = {
-      sourceCode: btoa(driverCode),
+      sourceCode: btoa(originalCode),
       testCases,
       languageId: LANGUAGE_ID[language],
     };
+    setVerificationLoading(true);
     dispatch(verifyProblem(verificationSubmissionData));
   }
   return (
@@ -153,7 +155,7 @@ function ProblemCodeCard({
               outError ? "border-red-600 border" : "text-white"
             } text-white overflow-y-scroll`}
           >
-            {!loading ? (
+            {!verificationLoading ? (
               <>
                 <p
                   className={`${
@@ -179,9 +181,10 @@ function ProblemCodeCard({
         </div>
         <div className="w-[50%] h-12  flex gap-5 justify-end">
           <button
-            disabled={loading}
+            type="button"
+            disabled={verificationLoading}
             className={`${
-              !loading
+              !verificationLoading
                 ? testCaseValidated
                   ? "bg-transparent text-primary"
                   : "bg-primary"
@@ -189,25 +192,35 @@ function ProblemCodeCard({
             } w-44 text-black font-bold rounded mt-4`}
             onClick={runClickHandler}
           >
-            {loading && (
+            {verificationLoading && (
               <div className="w-4 h-4 animate-spin rounded-full border-4 border-primary border-t-4 border-t-transparent"></div>
             )}
-            {!loading &&
+            {!verificationLoading &&
               (testCaseValidated
                 ? "Revalidate test cases"
                 : "Validate test cases")}
           </button>
           {testCaseValidated && (
             <button
-              type="submit"
-              disabled={loading}
+              type="button"
+              onClick={async () => {
+                const formErrors: any = await formik.validateForm();
+                console.log(formErrors);
+                const fields = Object.keys(formErrors);
+                if (fields.length !== 0) {
+                  fields.forEach((field) => {
+                    toast.error(formErrors[field]);
+                  });
+                  return;
+                }
+                setModal(true);
+              }}
+              disabled={verificationLoading}
               className={`${
-                !loading ? "bg-primary" : "bg-transparent border-primary"
+                !verificationLoading
+                  ? "bg-primary"
+                  : "bg-transparent border-primary"
               } w-36 text-black font-bold rounded mt-4`}
-              // onClick={() => {
-              //   console.log("Open modal");
-              // }}
-              // onClick={addProblemHandler}
             >
               Add this problem
             </button>
