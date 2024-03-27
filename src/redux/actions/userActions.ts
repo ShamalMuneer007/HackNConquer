@@ -25,9 +25,7 @@ export const userLogin = createAsyncThunk(
       );
       const data = response.data;
       const decodedJwt = jwtDecode<CustomJwtPayload>(data.accessToken);
-      setCookie("userToken", data.accessToken, {
-        secure: true,
-      });
+      setCookie("userToken", data.accessToken);
       return {
         username: decodedJwt.sub,
         role: decodedJwt.role,
@@ -63,6 +61,7 @@ export const userOauthLogin = createAsyncThunk(
       return {
         username: decodedJwt.sub,
         role: decodedJwt.role,
+        profileImage: decodedJwt.profileImage,
       };
     } catch (error: any) {
       console.error(error);

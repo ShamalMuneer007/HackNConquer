@@ -21,7 +21,7 @@ export interface ICategoryData {
 function AdminCategories() {
   const [categories, setCategories] = useState<ICategoryData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [deleteModal, setDeleteModal] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
@@ -72,12 +72,12 @@ function AdminCategories() {
         <div className="text-5xl mx-auto">
           <FaBoxesStacked />
         </div>
-        <div className="text-3xl">Add problem</div>
+        <div className="text-3xl">Add Category</div>
       </Link>
     </div>
   );
 
-  const renderProblemsList = () => (
+  const renderCategoryList = () => (
     <>
       <div className="w-full -mt-9 flex justify-end">
         <Link
@@ -168,7 +168,7 @@ function AdminCategories() {
                 </th>
 
                 <td className="px-6 py-4">{""}</td>
-                <td className="px-6 py-4">{""}</td>
+                <td className="px-6 py-4">{category.categoryLevel}</td>
                 <td className="py-4 flex gap-5 justify-center text-right">
                   <Link
                     to={`/admin/problems/edit-problem?id=${category.categoryId}`}
@@ -227,7 +227,7 @@ function AdminCategories() {
       <div className="page-padding">
         <h1 className="text-white font-bold text-4xl">Categories</h1>
         {!loading &&
-          (categories.length !== 0 ? renderProblemsList() : renderEmptyState())}
+          (categories.length !== 0 ? renderCategoryList() : renderEmptyState())}
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ export interface ProblemDetails {
   driverCode: string;
   testCases: TestCase[];
   solutionTemplate: string;
+  level: number;
   categories?: string[];
   languageId: number;
   difficulty: string;

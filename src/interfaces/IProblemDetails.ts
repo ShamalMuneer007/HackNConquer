@@ -2,6 +2,6 @@ export interface IProblemDetails {
   name: string;
   description: string;
   difficulty: string;
-  level?: number;
+  level: number;
   categories?: string[];
 }

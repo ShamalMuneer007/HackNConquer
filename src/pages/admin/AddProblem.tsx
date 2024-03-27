@@ -13,6 +13,7 @@ import { TypeDispatch } from "@/redux/store/store";
 import { toast } from "react-toastify";
 import AdminLoading from "@/components/admin/AdminLoading";
 import { useNavigate } from "react-router-dom";
+import { setResponse } from "@/redux/reducers/adminSlice";
 
 interface IFinalCode {
   originalCode: string;
@@ -26,6 +27,7 @@ function AddProblem() {
     description: "",
     difficulty: "",
     categories: [""],
+    level: 1,
   };
   const problemDetailsValidationSchema = Yup.object().shape({
     name: Yup.string()
@@ -74,6 +76,7 @@ function AddProblem() {
     console.log("Response", response);
     if (response && response.status === 200) {
       toast.success("Problem added successfully", { position: "top-center" });
+      dispatch(setResponse(null));
       navigate("/admin/problems");
     }
   }, [response]);
@@ -84,6 +87,7 @@ function AddProblem() {
       problemName: problemDetails.name,
       description: problemDetails.description,
       driverCode: code.driverCode,
+      level: problemDetails.level,
       testCases: testCases,
       solutionTemplate: code.solutionTemplate,
       categories: problemDetails.categories,

@@ -6,7 +6,7 @@
   @apply px-24 py-24;
 }
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 3px;
   height: 100%; /* Width of the scrollbar */
 }
 ::-webkit-scrollbar-corner {

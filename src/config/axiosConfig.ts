@@ -1,5 +1,8 @@
+import userSlice, { logout } from "@/redux/reducers/userSlice";
+import { store } from "@/redux/store/store";
 import axios from "axios";
-import { getCookie } from "typescript-cookie";
+import { useDispatch } from "react-redux";
+import { getCookie, removeCookie } from "typescript-cookie";
 
 const instance = axios.create({
   baseURL: "http://localhost:8080",
@@ -8,11 +11,19 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   const token = getCookie("userToken");
-  console.log(token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
     console.log(config);
   }
   return config;
 });
+instance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.log("ERROR : ", error);
+    return Promise.reject(error);
+  }
+);
 export default instance;

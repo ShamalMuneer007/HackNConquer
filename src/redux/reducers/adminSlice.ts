@@ -104,6 +104,6 @@ const adminSlice = createSlice({
       });
   },
 });
-export const { setLoader, setError, setMessage, setResult } =
+export const { setLoader, setError, setMessage, setResult, setResponse } =
   adminSlice.actions;
 export default adminSlice.reducer;

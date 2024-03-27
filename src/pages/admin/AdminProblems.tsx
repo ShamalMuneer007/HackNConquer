@@ -1,3 +1,4 @@
+import Loading from "@/components/Loading";
 import PageInfo from "@/components/PageInfo";
 import DeleteConfirmationModal from "@/components/modals/DeleteConfirmationModal";
 import instance from "@/config/axiosConfig";
@@ -12,7 +13,7 @@ import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BsFunnelFill, BsPencilSquare, BsTrash } from "react-icons/bs";
 import { FaMagnifyingGlass, FaPuzzlePiece } from "react-icons/fa6";
-import { Oval } from "react-loader-spinner";
+import { Oval, Rings } from "react-loader-spinner";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 export interface IProblemData {
@@ -37,10 +38,10 @@ export interface IProblemCategory {
 function AdminProblems() {
   const [problems, setProblems] = useState<IProblemData[]>([]);
   const [loader, setLoader] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedProblemId, setSelectedProblemId] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     setLoader(true);
@@ -54,7 +55,6 @@ function AdminProblems() {
         setLoader(false);
         setProblems(response.data.problems.content);
         setTotalPages(response.data.problems.totalPages);
-
         if (requestedPage > response.data.problems.totalPages) {
           navigate(`?page=${response.data.problems.totalPages}`);
         }
@@ -269,19 +269,7 @@ function AdminProblems() {
           setModal={setDeleteModal}
         />
       )}
-      {loader && (
-        <div className="fixed w-screen h-screen z-50 bg-black/20 backdrop-blur-md flex justify-center items-center">
-          <Oval
-            visible={true}
-            height="80"
-            width="80"
-            color="#4fa94d"
-            ariaLabel="oval-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        </div>
-      )}
+      <Loading loading={loader} />{" "}
       <div className="page-padding">
         <h1 className="text-white font-bold text-4xl">Problems</h1>
         {!loader &&

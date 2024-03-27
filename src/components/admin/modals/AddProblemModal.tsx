@@ -35,7 +35,7 @@ function AddProblemModal({
     }));
   };
   return (
-    <div className="bg-black/20 h-screen w-screen backdrop-blur-sm shadow-md fixed z-50 inset-0 overflow-hidden">
+    <div className="bg-black/20 h-screen w-screen backdrop-blur-sm shadow-md fixed z-30 inset-0 overflow-hidden">
       <div className="flex h-full w-full justify-center items-center">
         <div className="h-[90%] w-[60%] bg-dark-100 relative rounded text-white overflow-y-hidden">
           <div className=" p-6">

@@ -203,11 +203,52 @@ function ProblemDetialsCard({ setLanguage }: Props) {
               variant="lead"
               color="white"
               className=""
+              placeholder="Level"
+            >
+              Level
+            </Typography>
+            <div className="">
+              <Field name="level">
+                {({ field, form }: any) => (
+                  <>
+                    <Select
+                      onValueChange={(value) =>
+                        form.setFieldValue(field.name, parseInt(value))
+                      }
+                      value={field.value.toString()}
+                    >
+                      <SelectTrigger className="bg-gray-50 w-28 border border-gray-300 ] text-sm rounded-lg  dark:bg-dark-300 dark:border-dark-300 dark:placeholder-white dark:text-white">
+                        <SelectValue placeholder={"Level"} />
+                      </SelectTrigger>
+                      <SelectContent className="bg-black text-white border-none">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
+                          (level: number, index) => (
+                            <SelectItem
+                              key={index}
+                              value={level.toString()}
+                              className="hover:bg-dark-100/60"
+                            >
+                              {level}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </>
+                )}
+              </Field>
+            </div>
+          </div>
+          <div className="p-5">
+            <Typography
+              variant="lead"
+              color="white"
+              className=""
               placeholder=""
             >
               Language
             </Typography>
-            <div className="bg-black">
+            <div className="">
               <Select onValueChange={(value) => setLanguage(value)}>
                 <SelectTrigger className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg  dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white">
                   <SelectValue placeholder={"Javascript"} />

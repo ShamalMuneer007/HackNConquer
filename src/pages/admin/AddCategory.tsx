@@ -9,6 +9,7 @@ import { addCategory } from "@/redux/actions/adminAction";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import BasicFormikInput from "@/components/input/BasicFormikInput";
+import { setResponse } from "@/redux/reducers/adminSlice";
 function AddCategory() {
   const navigate = useNavigate();
   const { error, response } = useSelector((state: any) => state.admin);
@@ -21,6 +22,7 @@ function AddCategory() {
   useEffect(() => {
     console.log("Response", response);
     if (response && response.status === 200) {
+      dispatch(setResponse(null));
       toast.success("Category added successfully", { position: "top-center" });
       navigate("/admin/categories");
     }
