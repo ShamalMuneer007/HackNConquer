@@ -24,11 +24,13 @@ import { setLoader } from "@/redux/reducers/adminSlice";
 import { useDispatch } from "react-redux";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import MultiSelectCheckBoxModal from "../MultiSelectCheckBoxModal";
+import { IProblemCategory } from "@/pages/admin/AdminProblems";
 
 interface Props {
   setLanguage: (value: string) => void;
+  problemCategories?: IProblemCategory[];
 }
-function ProblemDetialsCard({ setLanguage }: Props) {
+function ProblemDetialsCard({ setLanguage, problemCategories }: Props) {
   const {
     errors,
     touched,
@@ -37,14 +39,25 @@ function ProblemDetialsCard({ setLanguage }: Props) {
     touched: FormikTouched<FormikValues>;
   } = useFormikContext();
   const [categories, setCategories] = useState<string[] | null>();
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const dispatch = useDispatch();
-  useEffect(() => {}, [selectedCategories]);
+  useEffect(() => {
+    if (problemCategories) {
+      console.log(
+        "CATEGORIIIII : ",
+        problemCategories.map((categri) => categri.categoryName)
+      );
+      if (problemCategories.length > 0) {
+        setSelectedCategories(() =>
+          problemCategories.map((categri) => categri.categoryName)
+        );
+      }
+    }
+  }, [problemCategories]);
   useEffect(() => {
     toast.dismiss();
     const hasErrors =
       Object.keys(errors).length > 0 && Object.keys(touched).length > 0;
-
     if (hasErrors) {
       Object.entries(touched).forEach(([field, isTouched]) => {
         console.log("Field : ", field);

@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 export interface IProblemData {
   problemName: string;
   description: string;
-  category: IProblemCategory[];
+  categories: IProblemCategory[];
   problemNo: number;
   problemId: string;
   languageId: number;
@@ -29,6 +29,7 @@ export interface IProblemData {
   testCases: TestCase[];
   updatedAt: string;
   createdAt: string;
+  problemLevel: number;
 }
 export interface IProblemCategory {
   categoryName: string;
@@ -190,26 +191,21 @@ function AdminProblems() {
               <tr
                 key={problem.problemId}
                 className="border-b dark:bg-dark-200 dark:border-gray-800 cursor-pointer"
+                onClick={() => {
+                  navigate(
+                    `/admin/problems/problem-details/${problem.problemId}`
+                  );
+                }}
               >
                 <th
                   scope="row"
                   className="px-20 py-4 font-mediu whitespace-nowrap dark:text-white"
-                  onClick={() => {
-                    navigate(
-                      `/admin/problems/problem-details/${problem.problemId}`
-                    );
-                  }}
                 >
                   {problem.problemNo}
                 </th>
                 <th
                   scope="row"
                   className="px-6 py-4 font-mediu whitespace-nowrap dark:text-white"
-                  onClick={() => {
-                    navigate(
-                      `/admin/problems/problem-details/${problem.problemId}`
-                    );
-                  }}
                 >
                   {problem.problemName}
                 </th>
@@ -228,13 +224,15 @@ function AdminProblems() {
                 </td>
                 <td className="py-4 flex gap-5 justify-center text-right">
                   <Link
-                    to={`/admin/problems/edit-problem?id=${problem.problemId}`}
+                    to={`/admin/problems/edit-problem/${problem.problemId}`}
                     className="text-xl dark:text-white hover:text-yellow-700 transition-all"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <BsPencilSquare />
                   </Link>
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       deleteProblem(problem.problemId);
                     }}
                     className="text-xl dark:text-white hover:text-red-600 transition-all"
@@ -273,7 +271,9 @@ function AdminProblems() {
       <div className="page-padding">
         <h1 className="text-white font-bold text-4xl">Problems</h1>
         {!loader &&
-          (problems.length !== 0 ? renderProblemsList() : renderEmptyState())}
+          (problems.length !== 0
+            ? renderProblemsList()
+            : !problems && renderEmptyState())}
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import instance from "@/config/axiosConfig";
 import { PROBLEM_ADMIN_SERVICE_URL } from "@/constants/service_urls";
 import { TestCase } from "@/interfaces/TestCase";
+import { TestExample } from "@/pages/admin/AddProblem";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 interface IProblemCode {
   sourceCode: string;
@@ -17,6 +18,8 @@ export interface ProblemDetails {
   categories?: string[];
   languageId: number;
   difficulty: string;
+  examples?: TestExample[];
+  problemLevel: number;
 }
 
 //verify problem

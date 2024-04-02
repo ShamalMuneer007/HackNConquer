@@ -6,7 +6,7 @@ import { TestCase } from "@/interfaces/TestCase";
 import { IProblemDetails } from "@/interfaces/IProblemDetails";
 import { LANGUAGE_ID, MAIN_SNIPPET } from "@/constants/language";
 import AddProblemModal from "@/components/admin/modals/AddProblemModal";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { ProblemDetails, addProblem } from "@/redux/actions/adminAction";
 import { TypeDispatch } from "@/redux/store/store";
@@ -14,13 +14,18 @@ import { toast } from "react-toastify";
 import AdminLoading from "@/components/admin/AdminLoading";
 import { useNavigate } from "react-router-dom";
 import { setResponse } from "@/redux/reducers/adminSlice";
+import { Card, Input, Typography, input } from "@material-tailwind/react";
+import ExampleTestCases from "@/components/admin/problems/ExampleTestCases";
 
 interface IFinalCode {
   originalCode: string;
   driverCode: string;
   solutionTemplate: string;
 }
-
+export interface TestExample {
+  input: string;
+  output: string;
+}
 function AddProblem() {
   const initialProblemState: IProblemDetails = {
     name: "",
@@ -54,7 +59,10 @@ function AddProblem() {
   });
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
-
+  const [examples, setExamples] = useState<TestExample[]>([
+    { input: "", output: "" },
+    { input: "", output: "" },
+  ]);
   useEffect(() => {
     console.log("CODE : ", code);
   }, [code]);
@@ -93,6 +101,8 @@ function AddProblem() {
       categories: problemDetails.categories,
       languageId: LANGUAGE_ID[language],
       difficulty: problemDetails.difficulty,
+      examples: examples,
+      problemLevel: problemDetails.level,
     };
     if (addProblemSubmissionData.solutionTemplate.length < 5) {
       toast.error("Please add a valid solution template !!", {
@@ -119,6 +129,7 @@ function AddProblem() {
         >
           <Form>
             <ProblemDetialsCard setLanguage={setLanguage} />
+            <ExampleTestCases examples={examples} setExamples={setExamples} />
             <ProblemCodeCard
               setModal={setModal}
               setCode={setCode}

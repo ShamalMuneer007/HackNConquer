@@ -1,10 +1,15 @@
 import { SolutionResponse } from "@/pages/problem/Problem";
 import { useEffect, useState } from "react";
+import { BsClock, BsCpu } from "react-icons/bs";
 
 interface Props {
-  submissionResponse: SolutionResponse | undefined;
+  submissionResponse: SolutionResponse | null;
+  errorResponse: string;
 }
-function SubmissionResponseWindow({ submissionResponse }: Props) {
+function SubmissionResponseWindow({
+  submissionResponse,
+  errorResponse,
+}: Props) {
   const [result, setResult] = useState<JSX.Element>(<></>);
   const [acceptedOpen, setAcceptedOpen] = useState(false);
   const [rejectedOpen, setRejectedOpen] = useState(false);
@@ -20,6 +25,29 @@ function SubmissionResponseWindow({ submissionResponse }: Props) {
   useEffect(() => {
     const resultEle = (
       <>
+        <div className="flex gap-5 items-center text-gray-400">
+          <div
+            className={`${
+              submissionResponse?.submissionStatus === "ACCEPTED"
+                ? "text-green-400"
+                : "text-red-600"
+            } font-bold text-xl  px-5 pt-0`}
+          >
+            {submissionResponse?.submissionStatus === "ACCEPTED"
+              ? "ACCEPTED"
+              : "WRONG ANSWER"}
+          </div>
+          <div className="font-semibold flex items-center gap-2 text-sm">
+            <BsCpu className="text-base" /> Memory :{" "}
+            {submissionResponse?.averageMemory} MB
+          </div>
+          |
+          <div className="font-semibold flex items-center gap-2 text-sm">
+            <BsClock className="text-base" />
+            Time : {submissionResponse?.averageTime} ms
+          </div>
+        </div>
+        <hr className="mt-4" />
         <div className="p-5 mb-2  justify-center items-center">
           <div className="flex flex-col gap-5">
             <div>
@@ -201,28 +229,21 @@ function SubmissionResponseWindow({ submissionResponse }: Props) {
           Test results
         </div>
         <div className="p-5">
-          <div className="flex gap-5 items-center text-gray-400">
-            <div
-              className={`${
-                submissionResponse?.submissionStatus === "ACCEPTED"
-                  ? "text-green-400"
-                  : "text-red-600"
-              } font-bold text-xl  px-5 pt-0`}
-            >
-              {submissionResponse?.submissionStatus.replace("_", " ")}
-            </div>
-            <div className="font-semibold text-xs">
-              Memory : {submissionResponse?.averageMemory}
-            </div>
-            |
-            <div className="font-semibold text-xs">
-              Time : {submissionResponse?.averageTime}
-            </div>
-          </div>
-          <hr className="mt-4" />
           <div className="h-full text-white">
             {submissionResponse ? (
               result
+            ) : errorResponse ? (
+              <>
+                <div className="flex gap-5 items-center text-gray-400">
+                  <div className="text-red-600 font-bold text-xl  px-5 pt-0">
+                    ERROR
+                  </div>
+                </div>
+                <hr className="mt-4" />
+                <div className="text-center mt-8 text-red-700 font-bold rounded w-full">
+                  {errorResponse}
+                </div>
+              </>
             ) : (
               <div className="flex justify-center my-auto items-center h-52 font-semibold text-gray-500 text-lg">
                 Please submit the solution

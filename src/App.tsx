@@ -17,10 +17,9 @@ import Users from "./pages/admin/Users";
 import AdminCategories from "./pages/admin/AdminCategories";
 import Landing from "./pages/landing/Landing";
 import ProblemSet from "./pages/problem/ProblemSet";
-import NetworkError from "./pages/error/NetworkError";
-import ServerError from "./pages/error/ServerError";
 import NotFound from "./pages/error/NotFound";
 import Problem from "./pages/problem/Problem";
+import EditProblem from "./pages/admin/EditProblem";
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -100,6 +99,10 @@ function App() {
             element={<AdminProtectedRoute element={<ProblemDetails />} />}
           ></Route>
           <Route
+            path="problems/edit-problem/:problemId"
+            element={<AdminProtectedRoute element={<EditProblem />} />}
+          ></Route>
+          <Route
             path="categories"
             element={<AdminProtectedRoute element={<AdminCategories />} />}
           ></Route>
@@ -108,6 +111,7 @@ function App() {
             path="categories/add-category"
             element={<AdminProtectedRoute element={<AddCategory />} />}
           ></Route>
+          <Route path="*" element={<NotFound />}></Route>
         </Route>
 
         {/* User Routes */}

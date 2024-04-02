@@ -130,22 +130,17 @@ function ProblemSet() {
                 <tr
                   key={problem.problemId}
                   className="border-b dark:bg-dark-200 dark:border-gray-800 cursor-pointer"
+                  onClick={() => navigate(`/problems/${problem.problemNo}`)}
                 >
                   <th
                     scope="row"
                     className="px-20 py-4 font-mediu whitespace-nowrap dark:text-white"
-                    onClick={() => {
-                      navigate(`/problems/${problem.problemNo}`);
-                    }}
                   >
                     {problem.problemNo}
                   </th>
                   <th
                     scope="row"
                     className="px-6 py-4 font-mediu whitespace-nowrap dark:text-white"
-                    onClick={() => {
-                      navigate(`/problems/${problem.problemNo}`);
-                    }}
                   >
                     {problem.problemName}
                   </th>

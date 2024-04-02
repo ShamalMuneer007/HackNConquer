@@ -14,9 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Provider store={store}>
         <GoogleOAuthProvider clientId="164160106766-locfulpn4jjafcamncepac1ia6rhd00c.apps.googleusercontent.com">
           <ThemeProvider>
-            <PrimeReactProvider>
-              <App />
-            </PrimeReactProvider>
+            <App />
           </ThemeProvider>
         </GoogleOAuthProvider>
       </Provider>

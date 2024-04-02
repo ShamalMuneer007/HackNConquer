@@ -24,3 +24,23 @@
 ::-webkit-scrollbar-track {
   background-color: transparent; /* Color of the track */
 }
+.skeleton-loader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeleton-item {
+  height: 2rem;
+  background: #a0a0a0;
+  animation: skeleton-loading 0.7s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    @apply bg-dark-300;
+  }
+  100% {
+    @apply bg-dark-100;
+  }
+}

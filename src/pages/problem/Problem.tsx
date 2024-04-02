@@ -3,7 +3,7 @@ import {
   PROBLEM_SERVICE_URL,
   SUBMISSION_SERVICE_URL,
 } from "@/constants/service_urls";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 import { IProblemData } from "../admin/AdminProblems";
@@ -19,10 +19,7 @@ import { useSelector } from "react-redux";
 import SolutionWindow from "@/components/problem/SolutionWindow";
 import SubmissionResponseWindow from "@/components/problem/SubmissionResponseWindow";
 import { AxiosResponse } from "axios";
-// interface IProblemConsoleInfo {
-//   language: string;
-//   info: IProblemData;
-// }
+
 export interface SubmissionTestCase {
   input: string;
   output: string;
@@ -42,8 +39,9 @@ function Problem() {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState("");
   const [solutionCode, setSolutionCode] = useState<string | undefined>("");
+  const [errorResponse, setErrorResponse] = useState("");
   const [submissionResponse, setSubmissionResponse] =
-    useState<SolutionResponse>();
+    useState<SolutionResponse | null>(null);
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -72,6 +70,8 @@ function Problem() {
   const { user } = useSelector((state: any) => state.user);
 
   const handleCodeSubmission = () => {
+    setSubmissionResponse(null);
+    setErrorResponse("");
     if (!user) {
       toast.error("Please login to submit your solution", {
         draggable: true,
@@ -87,6 +87,7 @@ function Problem() {
         languageId: problemInfo?.languageId,
         solutionCode,
         driverCode: problemInfo?.driverCode,
+        problemLevel: problemInfo?.problemLevel,
       };
       console.log(submissionData);
       try {
@@ -101,6 +102,15 @@ function Problem() {
         if (error.response && error.response.status >= 500) {
           toast.error("Something went wrong... Please try again later");
         }
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.status >= 400 &&
+          error.response.status < 500
+        ) {
+          console.log("CLIENT ERROR : ", error.response);
+          setErrorResponse(error.response.data.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -110,12 +120,15 @@ function Problem() {
   return (
     <>
       <Loading loading={loading} />
-      <div className="mt-[4.014rem] rounded-b-xl overflow-hidden">
+      <div className="mt-[4.3%] h-[90vh] rounded-xl overflow-hidden">
         {problemInfo && (
-          <div className="h-[90vh]">
+          <div className="h-screen">
             <ResizablePanelGroup direction="horizontal">
               <ResizablePanel defaultSize={44}>
-                <ProblemDetailWindow problemInfo={problemInfo} />
+                <ProblemDetailWindow
+                  problemInfo={problemInfo}
+                  submissionResponse={submissionResponse}
+                />
               </ResizablePanel>
               <ResizableHandle
                 withHandle
@@ -137,6 +150,7 @@ function Problem() {
                   <ResizablePanel>
                     <SubmissionResponseWindow
                       submissionResponse={submissionResponse}
+                      errorResponse={errorResponse}
                     />
                   </ResizablePanel>
                 </ResizablePanelGroup>
