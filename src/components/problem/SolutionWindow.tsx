@@ -48,7 +48,7 @@ function SolutionWindow({
 
   return (
     <div className="w-full relative  h-full">
-      <div className="w-full flex p-2 px-5 bg-dark-200">
+      <div className="w-full rounded-t-lg flex p-2 px-5 relative z-30 bg-dark-200">
         <span className="text-primary">
           <Code2Icon />
         </span>
@@ -77,7 +77,7 @@ function SolutionWindow({
         onMount={handleEditorDidMount}
         loading={convertToReactNode(<CustomLoadingComponent />)}
       />
-      <div className="bg-[#191919] absolute bottom-0 w-full px-10 py-3 flex justify-end">
+      <div className="bg-[#191919] absolute z-10 bottom-0 w-full px-10 py-3 flex justify-end">
         <button
           onClick={handleCodeSubmission}
           className=" hover:bg-primary text-sm hover:text-black border transition-colors bg-transparent border-primary text-primary font-bold rounded-lg px-5 p-2"

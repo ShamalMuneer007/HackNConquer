@@ -1,6 +1,9 @@
 import { TypeDispatch } from "../../../redux/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { userRegister } from "../../../redux/actions/userActions";
+import {
+  userOauthLogin,
+  userRegister,
+} from "../../../redux/actions/userActions";
 import Particle from "../../../components/particle/Particle";
 import Logo from "../../../components/Logo/Logo";
 import { Formik, Form } from "formik";
@@ -66,7 +69,7 @@ function Signup() {
   };
   return (
     <>
-      <div className="h-[99vh] md:px-24 px-2">
+      <div className="h-[98.9vh] md:px-24 px-2">
         <Particle />
         {otpModal && (
           <OtpModal
@@ -75,11 +78,13 @@ function Signup() {
             setOtpModal={setOtpModal}
           />
         )}
-        <div className="text-white lg:block hidden font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
-          <Logo />
+        <div className="text-white lg:block hidden font-bold absolute pt-7 md:left-[5%] left-[10%] md:text-3xl text-4xl">
+          <Link to={"/"}>
+            <Logo className="w-[30%]" />
+          </Link>
         </div>
         <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-blue-gray-800 rounded-xl py-16 lg:w-[40%] w-[70%]">
+          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-blue-gray-800 rounded-xl py-12 lg:w-[40%] w-[70%]">
             <div className="flex flex-col">
               <div className="lg:ps-20 mb-12 ">
                 <h2 className="text-white font-bold text-4xl text-center lg:text-left">
@@ -124,7 +129,7 @@ function Signup() {
                 <div className="flex justify-center w-full mt-5">
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
-                      console.log(credentialResponse);
+                      dispatch(userOauthLogin(credentialResponse.credential));
                     }}
                     onError={() => {
                       console.log("Login Failed");

@@ -30,6 +30,7 @@ export interface IProblemData {
   updatedAt: string;
   createdAt: string;
   problemLevel: number;
+  acceptanceRate: number;
 }
 export interface IProblemCategory {
   categoryName: string;
@@ -124,8 +125,8 @@ function AdminProblems() {
         </div>
       </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-10">
-        <table className="w-full text-sm text-left rtl:text-right text-dark-500 dark:text-dark-400">
-          <thead className="text-xs text-dark-700 uppercase bg-dark-50 dark:bg-dark-300 dark:text-white">
+        <table className="w-full text-sm text-left rtl:text-right  dark:text-dark-500">
+          <thead className="text-xs text-dark-700 uppercase bg-dark-50 dark:bg-dark-400 dark:text-white">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Problem Number
@@ -190,7 +191,7 @@ function AdminProblems() {
             {problems.map((problem) => (
               <tr
                 key={problem.problemId}
-                className="border-b dark:bg-dark-200 dark:border-gray-800 cursor-pointer"
+                className="border-b dark:bg-dark-200 hover:bg-dark-100 transition-colors dark:border-gray-800 cursor-pointer"
                 onClick={() => {
                   navigate(
                     `/admin/problems/problem-details/${problem.problemId}`

@@ -105,7 +105,7 @@ function OtpModal({ setOtpModal, userData, registerSubmit }: Props) {
           <button
             disabled={retryTimer > 0}
             onClick={() => {
-              registerSubmit(userData);
+              registerSubmit({ ...userData, otp: null });
               setRetryTimer(60);
             }}
             className="w-full mt-5 text-white font-semibold text-center"

@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { BsPower } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/reducers/userSlice";
@@ -11,9 +11,11 @@ function AdminNavbar() {
   const dispatch = useDispatch();
   return (
     <div>
-      <div className="w-screen backdrop-blur-md flex z-50 items-center py-3 px-20 bg-gray-900/50 left-0 h-16 fixed top-0">
-        <div className="text-white text-2xl font-bold">
-          <Logo />
+      <div className="w-screen backdrop-blur-md flex z-50 text-sm items-center py-3 px-20 bg-gray-900/50 left-0 h-16 fixed top-0">
+        <div className="text-white flex items-center">
+          <Link to={"/"} className="w-[45%] pt-2">
+            <Logo />
+          </Link>
         </div>
         <div className="flex text-white w-full justify-center gap-5">
           <NavLink
@@ -96,7 +98,7 @@ function AdminNavbar() {
             onClick={() => {
               dispatch(logout());
             }}
-            className="text-white text-2xl hover:text-red-500 transition-colors flex items-center gap-3"
+            className="text-white text-xl hover:text-red-500 transition-colors flex items-center gap-3"
           >
             {/* Logout */}
             <BsPower />

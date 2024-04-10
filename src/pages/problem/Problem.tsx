@@ -2,6 +2,7 @@ import instance from "@/config/axiosConfig";
 import {
   PROBLEM_SERVICE_URL,
   SUBMISSION_SERVICE_URL,
+  USER_SERVICE_URL,
 } from "@/constants/service_urls";
 import { useEffect, useState } from "react";
 
@@ -15,10 +16,11 @@ import {
   ResizablePanel,
 } from "@/shadcn/ui/resizable";
 import ProblemDetailWindow from "@/components/problem/ProblemDetailWindow";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SolutionWindow from "@/components/problem/SolutionWindow";
 import SubmissionResponseWindow from "@/components/problem/SubmissionResponseWindow";
 import { AxiosResponse } from "axios";
+import { setUser } from "@/redux/reducers/userSlice";
 
 export interface SubmissionTestCase {
   input: string;
@@ -36,8 +38,8 @@ export interface SolutionResponse {
 function Problem() {
   const { problemNumber } = useParams();
   const [problemInfo, setProblemInfo] = useState<IProblemData>();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState("");
   const [solutionCode, setSolutionCode] = useState<string | undefined>("");
   const [errorResponse, setErrorResponse] = useState("");
   const [submissionResponse, setSubmissionResponse] =
@@ -87,7 +89,7 @@ function Problem() {
         languageId: problemInfo?.languageId,
         solutionCode,
         driverCode: problemInfo?.driverCode,
-        problemLevel: problemInfo?.problemLevel,
+        problemLevel: problemInfo?.problemLevel ? problemInfo.problemLevel : 1,
       };
       console.log(submissionData);
       try {
@@ -96,6 +98,12 @@ function Problem() {
           submissionData
         );
         setSubmissionResponse(response.data);
+        if (response.data.submissionStatus === "ACCEPTED") {
+          const newUserDataResponse = await instance.get(
+            `${USER_SERVICE_URL}/user/fetch-userdata`
+          );
+          dispatch(setUser(newUserDataResponse.data));
+        }
         console.log(response);
       } catch (error: any) {
         console.error(error);
@@ -120,7 +128,7 @@ function Problem() {
   return (
     <>
       <Loading loading={loading} />
-      <div className="mt-[4.3%] h-[90vh] rounded-xl overflow-hidden">
+      <div className="mt-[4.15%] h-[90vh] rounded-xl overflow-hidden">
         {problemInfo && (
           <div className="h-screen">
             <ResizablePanelGroup direction="horizontal">

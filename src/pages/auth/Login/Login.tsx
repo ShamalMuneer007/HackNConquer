@@ -47,10 +47,10 @@ function Login() {
   }
   return (
     <>
-      <div className="h-[99vh] md:px-24 px-2">
+      <div className="h-[98.9vh] md:px-24 px-2">
         <Particle />
-        <div className="text-white lg:block hidden font-bold absolute pt-10 md:left-[5%] left-[10%] md:text-3xl text-4xl">
-          <Logo />
+        <div className="text-white lg:block hidden font-bold absolute pt-7 md:left-[5%] left-[10%] md:text-3xl text-4xl">
+          <Logo className="w-[30%]" />
         </div>
         <div className="flex h-full items-center lg:justify-start justify-center gap-32">
           <div className="backdrop-blur-sm ms-20 bg-opacity-15 bg-blue-gray-800 rounded-xl py-16 lg:w-[40%] w-[70%]">

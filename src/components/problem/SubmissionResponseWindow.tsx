@@ -224,7 +224,7 @@ function SubmissionResponseWindow({
   }, [submissionResponse, rejectedOpen, acceptedOpen]);
   return (
     <>
-      <div className="h-full bg-dark-200 relative overflow-y-scroll scrollbar-hide">
+      <div className="h-full bg-dark-200 rounded-b-lg relative overflow-y-scroll scrollbar-hide">
         <div className="bg-dark-300 w-full flex items-center text-white p-6 h-10 sticky top-0">
           Test results
         </div>

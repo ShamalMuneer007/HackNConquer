@@ -1,10 +1,11 @@
-function Logo() {
+interface Props {
+  className?: string;
+}
+function Logo({ className }: Props) {
   return (
-    <>
-      <h2>
-        Hack<span className="text-primary">N</span>Conquer
-      </h2>
-    </>
+    // <div className="flex h-full items-center">
+    <img className={`${className}`} src="\Logo.png"></img>
+    // </div>
   );
 }
 

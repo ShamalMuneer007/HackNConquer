@@ -20,6 +20,7 @@ import ProblemSet from "./pages/problem/ProblemSet";
 import NotFound from "./pages/error/NotFound";
 import Problem from "./pages/problem/Problem";
 import EditProblem from "./pages/admin/EditProblem";
+import UserHome from "./pages/user/UserHome";
 
 function App() {
   const { user } = useSelector((state: any) => state.user);
@@ -30,13 +31,13 @@ function App() {
   //   }
   //   console.log("User data : ", user);
   // }, [user]);
+  useEffect(() => {
+    console.log("USER : ", user);
+  }, [user]);
   const ProtectedRoute = ({ element }: { element: ReactNode }) => {
     return user ? element : <Navigate to="/login" />;
   };
   const AdminProtectedRoute = ({ element }: { element: ReactNode }) => {
-    useEffect(() => {
-      console.log(user);
-    }, []);
     return user && user.role === "ROLE_ADMIN" ? (
       element
     ) : (
@@ -116,7 +117,7 @@ function App() {
 
         {/* User Routes */}
         <Route path="/" element={<UserNavbar />}>
-          <Route index element={<Landing />}></Route>
+          <Route index element={user ? <UserHome /> : <Landing />}></Route>
           <Route path="problems" element={<ProblemSet />}></Route>
           <Route path="problems/:problemNumber" element={<Problem />}></Route>
           {/* <Route path="network-error" element={<NetworkError />}></Route>

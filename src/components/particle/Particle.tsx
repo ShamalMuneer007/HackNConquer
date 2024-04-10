@@ -13,12 +13,14 @@ function Particle() {
       id="tsparticles"
       init={particlesInit}
       loaded={particlesLoaded}
+      className="z-0"
       options={{
         background: {
           color: {
             value: "#1a202c",
           },
         },
+        zLayers: 1,
         fpsLimit: 120,
         interactivity: {
           events: {

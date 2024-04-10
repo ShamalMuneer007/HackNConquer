@@ -66,7 +66,7 @@ function ProblemSet() {
           </div>
         </div>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-10">
-          <table className="w-full text-sm text-left rtl:text-right text-dark-500 dark:text-dark-400">
+          <table className="w-full text-sm text-left rtl:text-right  dark:text-dark-600">
             <thead className="text-xs text-dark-700 uppercase bg-dark-50 dark:bg-dark-300 dark:text-white">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -129,18 +129,18 @@ function ProblemSet() {
               {problems.map((problem) => (
                 <tr
                   key={problem.problemId}
-                  className="border-b dark:bg-dark-200 dark:border-gray-800 cursor-pointer"
+                  className="border-b dark:bg-dark-200 hover:bg-dark-100 transition-all dark:border-gray-800 cursor-pointer"
                   onClick={() => navigate(`/problems/${problem.problemNo}`)}
                 >
                   <th
                     scope="row"
-                    className="px-20 py-4 font-mediu whitespace-nowrap dark:text-white"
+                    className="px-20 py-4  whitespace-nowrap dark:text-white"
                   >
                     {problem.problemNo}
                   </th>
                   <th
                     scope="row"
-                    className="px-6 py-4 font-mediu whitespace-nowrap dark:text-white"
+                    className="px-6 py-4  whitespace-nowrap dark:text-white"
                   >
                     {problem.problemName}
                   </th>
@@ -151,7 +151,7 @@ function ProblemSet() {
                   >
                     {problem.difficulty}
                   </td>
-                  <td className="px-6 py-4">{""}</td>
+                  <td className="px-6 py-4 ">{problem.acceptanceRate} % </td>
                   <td className="px-6 py-4">
                     {Object.keys(LANGUAGE_ID).find(
                       (key) => LANGUAGE_ID[key] === problem.languageId

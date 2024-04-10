@@ -6,26 +6,34 @@ import {
 import { createSlice } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 import { CustomJwtPayload } from "../../interfaces/CustomJwtPayload";
-import { getCookie, removeCookie, setCookie } from "typescript-cookie";
+import { getCookie, removeCookie } from "typescript-cookie";
+import instance from "@/config/axiosConfig";
+import { AxiosResponse } from "axios";
+import { USER_SERVICE_URL } from "@/constants/service_urls";
+import { useRouteLoaderData } from "react-router-dom";
+import IUserState from "@/interfaces/IUserState";
 
 const token = getCookie("userToken");
 let user = null;
 if (token) {
   const decoded = jwtDecode<CustomJwtPayload>(token);
-  const role = decoded.role;
-  const username = decoded.sub;
   if (decoded.exp * 1000 < Date.now()) {
     console.log("Unauthorized request!");
     removeCookie("userToken");
   } else {
-    user = {
-      username: username,
-      role: role,
-    };
+    try {
+      console.log("USER TOKEN", token);
+      const response: AxiosResponse = await instance.get(
+        `${USER_SERVICE_URL}/user/fetch-userdata`
+      );
+      user = response.data;
+    } catch (error: any) {
+      console.error(error.message);
+    }
   }
 }
 
-const intialState = {
+const intialState: IUserState = {
   loading: false,
   user: user,
   message: null,
@@ -36,7 +44,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: intialState,
   reducers: {
-    logout: (state: any) => {
+    logout: (state) => {
       removeCookie("userToken");
       state.loading = false;
       state.user = null;
@@ -48,6 +56,9 @@ const userSlice = createSlice({
     },
     setMessage: (state, action) => {
       state.message = action.payload;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload;
@@ -65,7 +76,7 @@ const userSlice = createSlice({
         state.user = payload;
         state.error = null;
       })
-      .addCase(userLogin.rejected, (state: any, action) => {
+      .addCase(userLogin.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         state.error = action.payload;
@@ -80,7 +91,7 @@ const userSlice = createSlice({
         state.user = payload;
         state.error = null;
       })
-      .addCase(userOauthLogin.rejected, (state: any, action) => {
+      .addCase(userOauthLogin.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         state.error = action.payload;
@@ -90,22 +101,12 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(userRegister.fulfilled, (state: any, { payload }: any) => {
-        const { accessToken, message } = payload;
+      .addCase(userRegister.fulfilled, (state, { payload }: any) => {
         state.loading = false;
         state.error = null;
-        state.message = { message, status: 200 };
-        console.log("Register action fullfilled: ", payload);
-        if (!accessToken) {
-          state.user = null;
-          return;
-        }
-        const decodedJwt = jwtDecode<CustomJwtPayload>(accessToken);
-        setCookie("userToken", accessToken);
-        state.user = {
-          username: decodedJwt.sub,
-          role: decodedJwt.role,
-        };
+        console.log("Registration fulfilled message : ", payload.message);
+        state.message = { message: payload.message, status: 200 };
+        state.user = payload.userData ? payload.userData : null;
         console.log("Registration success");
       })
       .addCase(userRegister.rejected, (state: any, { payload }) => {
@@ -115,5 +116,6 @@ const userSlice = createSlice({
       });
   },
 });
-export const { logout, setLoader, setError, setMessage } = userSlice.actions;
+export const { logout, setLoader, setError, setMessage, setUser } =
+  userSlice.actions;
 export default userSlice.reducer;

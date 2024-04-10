@@ -73,7 +73,7 @@ function Submissions({ problemInfo, submissionResponse }: Props) {
                 {submissionDatas.map((submissionData, index) => (
                   <tr
                     key={index}
-                    className="border-b bg-transparent-800 border-gray-800 hover:bg-gray-800 hover:cursor-pointer"
+                    className="border-b bg-transparent-800 transition-colors border-gray-800 hover:bg-gray-800 hover:cursor-pointer"
                   >
                     <td
                       className={`py-4 px-6  whitespace-nowrap text-center font-semibold ${

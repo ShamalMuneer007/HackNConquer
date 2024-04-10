@@ -13,7 +13,7 @@ function ProblemDetailWindow({ problemInfo, submissionResponse }: Props) {
     setWindow(windowNumber);
   };
   return (
-    <div className="h-full relative w-full  bg-dark-200">
+    <div className="h-full relative w-full  bg-dark-100">
       {/* <div className="fixed inset-0 top-0  bg-gray-800 opacity-50"></div>    */}
       <div className="z-10 sticky top-0">
         <div className=" text-white w-full p-4">
