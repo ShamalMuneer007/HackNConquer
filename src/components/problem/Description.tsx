@@ -7,7 +7,7 @@ interface Props {
 function Description({ problemInfo }: Props) {
   return (
     <>
-      <div className="overflow-y-auto  text-white p-10">
+      <div className="overflow-y-scroll text-white p-10">
         <div className="problem-heading font-semibold text-3xl">
           <span className="">{problemInfo.problemNo}.</span>{" "}
           <span className="">{problemInfo.problemName}</span>
@@ -39,6 +39,34 @@ function Description({ problemInfo }: Props) {
           </div>
         </div>
         <div className="mt-10">{problemInfo.description}</div>
+        <div className="mt-10">
+          {problemInfo.examples &&
+            problemInfo.examples.map((example, index) => (
+              <div key={index}>
+                <div className="p-4">
+                  <p>Example {index + 1} :</p>
+                  <div className="mt-2 flex flex-col">
+                    <div className="w-full my-2">
+                      <div className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md">
+                        <span className="font-semibold text-green-400">
+                          Input:{" "}
+                        </span>
+                        {example.input}
+                      </div>
+                    </div>
+                    <div className="w-full">
+                      <div className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md">
+                        <span className="font-semibold text-blue-400">
+                          Output:{" "}
+                        </span>
+                        {example.output}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
       <div className=" p-10 flex items-end text-white">
         Acceptance Rate : {problemInfo.acceptanceRate}%

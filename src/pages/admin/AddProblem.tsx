@@ -6,7 +6,7 @@ import { TestCase } from "@/interfaces/TestCase";
 import { IProblemDetails } from "@/interfaces/IProblemDetails";
 import { LANGUAGE_ID, MAIN_SNIPPET } from "@/constants/language";
 import AddProblemModal from "@/components/admin/modals/AddProblemModal";
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { ProblemDetails, addProblem } from "@/redux/actions/adminAction";
 import { TypeDispatch } from "@/redux/store/store";
@@ -14,7 +14,6 @@ import { toast } from "react-toastify";
 import AdminLoading from "@/components/admin/AdminLoading";
 import { useNavigate } from "react-router-dom";
 import { setResponse } from "@/redux/reducers/adminSlice";
-import { Card, Input, Typography, input } from "@material-tailwind/react";
 import ExampleTestCases from "@/components/admin/problems/ExampleTestCases";
 
 interface IFinalCode {
@@ -33,6 +32,7 @@ function AddProblem() {
     difficulty: "",
     categories: [""],
     level: 1,
+    examples: [],
   };
   const problemDetailsValidationSchema = Yup.object().shape({
     name: Yup.string()
@@ -57,9 +57,10 @@ function AddProblem() {
     driverCode: MAIN_SNIPPET[language],
     solutionTemplate: "",
   });
-  const navigate = useNavigate();
   const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
   const [examples, setExamples] = useState<TestExample[]>([
+    { input: "", output: "" },
     { input: "", output: "" },
     { input: "", output: "" },
   ]);
@@ -101,7 +102,7 @@ function AddProblem() {
       categories: problemDetails.categories,
       languageId: LANGUAGE_ID[language],
       difficulty: problemDetails.difficulty,
-      examples: examples,
+      examples,
       problemLevel: problemDetails.level,
     };
     if (addProblemSubmissionData.solutionTemplate.length < 5) {
@@ -110,9 +111,19 @@ function AddProblem() {
       });
       return;
     }
+    if (
+      addProblemSubmissionData.examples.filter(
+        (example) => example.input.length > 0 && example.output.length > 0
+      ).length < 3
+    ) {
+      toast.warn(
+        "Please provide all the inputs and outputs for three example test cases!!!"
+      );
+      return;
+    }
+    console.log("ADD PROBLEM SUBMISSION DATA : ", addProblemSubmissionData);
     dispatch(addProblem(addProblemSubmissionData));
   };
-
   return (
     <div className="page-padding">
       <AdminLoading />
@@ -120,7 +131,6 @@ function AddProblem() {
       <h3 className="text mt-8 mb-2 font-semibold text-2xl text-primary">
         Add problem
       </h3>
-
       <div className="w-full pb-7">
         <Formik
           initialValues={initialProblemState}

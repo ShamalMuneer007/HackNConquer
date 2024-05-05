@@ -13,7 +13,7 @@ function Particle() {
       id="tsparticles"
       init={particlesInit}
       loaded={particlesLoaded}
-      className="z-0"
+      className="z-0 absolute"
       options={{
         background: {
           color: {

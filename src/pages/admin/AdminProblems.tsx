@@ -13,13 +13,13 @@ import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BsFunnelFill, BsPencilSquare, BsTrash } from "react-icons/bs";
 import { FaMagnifyingGlass, FaPuzzlePiece } from "react-icons/fa6";
-import { Oval, Rings } from "react-loader-spinner";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { TestExample } from "./AddProblem";
 export interface IProblemData {
   problemName: string;
   description: string;
-  categories: IProblemCategory[];
+  categories: string[];
   problemNo: number;
   problemId: string;
   languageId: number;
@@ -31,6 +31,7 @@ export interface IProblemData {
   createdAt: string;
   problemLevel: number;
   acceptanceRate: number;
+  examples: TestExample[];
 }
 export interface IProblemCategory {
   categoryName: string;
@@ -217,7 +218,7 @@ function AdminProblems() {
                 >
                   {problem.difficulty}
                 </td>
-                <td className="px-6 py-4">{""}</td>
+                <td className="px-6 py-4">{problem.acceptanceRate}% </td>
                 <td className="px-6 py-4">
                   {Object.keys(LANGUAGE_ID).find(
                     (key) => LANGUAGE_ID[key] === problem.languageId

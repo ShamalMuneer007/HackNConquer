@@ -1,7 +1,7 @@
 export default interface IUserData {
   userId: number;
   username: string;
-  playerRank: string;
+  playerRank: number;
   profileImage: string;
   email: string;
   level: number;
@@ -9,4 +9,5 @@ export default interface IUserData {
   isPremium: boolean;
   role: string;
   currentMaxXp: number;
+  friends: IUserData[];
 }

@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store/store.ts";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ThemeProvider } from "@material-tailwind/react";
-import { PrimeReactProvider } from "primereact/api";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>

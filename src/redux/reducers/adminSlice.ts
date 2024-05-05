@@ -7,6 +7,7 @@ const intialState = {
   error: null as any | null,
   response: null as any | null,
   result: null as any | null,
+  solvedProblems: null as any | null,
 };
 
 const adminSlice = createSlice({

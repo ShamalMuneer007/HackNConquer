@@ -21,9 +21,15 @@ import NotFound from "./pages/error/NotFound";
 import Problem from "./pages/problem/Problem";
 import EditProblem from "./pages/admin/EditProblem";
 import UserHome from "./pages/user/UserHome";
+import Leaderboard from "./pages/auth/Leaderboard/Leaderboard";
+import GlobalLeaderboard from "./pages/auth/Leaderboard/GlobalLeaderboard";
+import { RootState } from "./redux/store/store";
+import Notifications from "./components/notification/Notification";
+import ClanLeaderboard from "./pages/auth/Leaderboard/ClanLeaderboard";
+import FriendsLeaderboard from "./pages/auth/Leaderboard/FriendsLeaderboard";
 
 function App() {
-  const { user } = useSelector((state: any) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
   // useEffect(() => {
   //   if (!user) {
@@ -46,6 +52,7 @@ function App() {
   };
   return (
     <>
+      <Notifications />
       <ToastContainer theme="dark" />
       <Routes>
         {/* Auth Routes */}
@@ -120,8 +127,22 @@ function App() {
           <Route index element={user ? <UserHome /> : <Landing />}></Route>
           <Route path="problems" element={<ProblemSet />}></Route>
           <Route path="problems/:problemNumber" element={<Problem />}></Route>
-          {/* <Route path="network-error" element={<NetworkError />}></Route>
-          <Route path="server-error" element={<ServerError />}></Route> */}
+          <Route
+            path="premium/subscribe"
+            element={<ProtectedRoute element={<></>} />}
+          ></Route>
+          <Route path="/leaderboard">
+            <Route index element={<Leaderboard />}></Route>
+            <Route path="global" element={<GlobalLeaderboard />}></Route>
+            <Route
+              path="friends"
+              element={<ProtectedRoute element={<FriendsLeaderboard />} />}
+            ></Route>
+            <Route
+              path="clan"
+              element={<ProtectedRoute element={<ClanLeaderboard />} />}
+            ></Route>
+          </Route>
           <Route path="*" element={<NotFound />}></Route>
         </Route>
       </Routes>

@@ -50,6 +50,7 @@ function Problem() {
       const response = await instance.get(
         `${PROBLEM_SERVICE_URL}/get-problem-info/${problemNumber}`
       );
+      console.log("PROBLEM DATA : ", response.data);
       if (response.status === 200) {
         setProblemInfo(response.data);
       }
@@ -126,11 +127,11 @@ function Problem() {
     submitSolution();
   };
   return (
-    <>
+    <div className="overflow-hidden">
       <Loading loading={loading} />
-      <div className="mt-[4.15%] h-[90vh] rounded-xl overflow-hidden">
+      <div className="mt-[4.45%] h-[90vh]">
         {problemInfo && (
-          <div className="h-screen">
+          <div className="h-[90vh]">
             <ResizablePanelGroup direction="horizontal">
               <ResizablePanel defaultSize={44}>
                 <ProblemDetailWindow
@@ -144,7 +145,7 @@ function Problem() {
               />
               <ResizablePanel>
                 <ResizablePanelGroup direction="vertical" className="h-100vh">
-                  <ResizablePanel defaultSize={60}>
+                  <ResizablePanel defaultSize={50}>
                     <SolutionWindow
                       handleCodeSubmission={handleCodeSubmission}
                       problemInfo={problemInfo}
@@ -167,7 +168,7 @@ function Problem() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

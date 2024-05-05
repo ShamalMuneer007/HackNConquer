@@ -28,9 +28,14 @@ import { IProblemCategory } from "@/pages/admin/AdminProblems";
 
 interface Props {
   setLanguage: (value: string) => void;
-  problemCategories?: IProblemCategory[];
+  problemCategories?: string[];
+  language?: string;
 }
-function ProblemDetialsCard({ setLanguage, problemCategories }: Props) {
+function ProblemDetialsCard({
+  setLanguage,
+  problemCategories,
+  language,
+}: Props) {
   const {
     errors,
     touched,
@@ -38,19 +43,16 @@ function ProblemDetialsCard({ setLanguage, problemCategories }: Props) {
     errors: FormikErrors<FormikValues> | any;
     touched: FormikTouched<FormikValues>;
   } = useFormikContext();
-  const [categories, setCategories] = useState<string[] | null>();
+  const [categories, setCategories] = useState<
+    string[] | IProblemCategory[] | null
+  >();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const dispatch = useDispatch();
   useEffect(() => {
     if (problemCategories) {
-      console.log(
-        "CATEGORIIIII : ",
-        problemCategories.map((categri) => categri.categoryName)
-      );
+      console.log("CATEGORIIIII : ", problemCategories);
       if (problemCategories.length > 0) {
-        setSelectedCategories(() =>
-          problemCategories.map((categri) => categri.categoryName)
-        );
+        setSelectedCategories(problemCategories);
       }
     }
   }, [problemCategories]);
@@ -264,7 +266,10 @@ function ProblemDetialsCard({ setLanguage, problemCategories }: Props) {
             <div className="">
               <Select onValueChange={(value) => setLanguage(value)}>
                 <SelectTrigger className="bg-gray-50 w-52 border border-gray-300 text-gray-900 text-sm rounded-lg  dark:bg-dark-300 dark:border-dark-300 dark:placeholder-gray-400 dark:text-white">
-                  <SelectValue placeholder={"Javascript"} />
+                  <SelectValue
+                    placeholder={language ? language : "Javascript"}
+                    defaultValue={language ? language : "Javascript"}
+                  />
                 </SelectTrigger>
                 <SelectContent className="bg-black text-white border-none">
                   {languages.map((language: string, index) => (

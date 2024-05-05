@@ -6,5 +6,5 @@ export interface IProblemDetails {
   difficulty: string;
   level: number;
   categories?: string[];
-  examples?: TestExample[];
+  examples: TestExample[];
 }

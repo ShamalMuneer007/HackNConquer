@@ -18,7 +18,7 @@ export interface ProblemDetails {
   categories?: string[];
   languageId: number;
   difficulty: string;
-  examples?: TestExample[];
+  examples: TestExample[];
   problemLevel: number;
 }
 

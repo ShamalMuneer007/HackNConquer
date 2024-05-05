@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { IProblemData } from "../admin/AdminProblems";
 import instance from "@/config/axiosConfig";
-import { PROBLEM_SERVICE_URL } from "@/constants/service_urls";
-import { BsFunnelFill } from "react-icons/bs";
+import {
+  PROBLEM_SERVICE_URL,
+  SUBMISSION_SERVICE_URL,
+} from "@/constants/service_urls";
+import { BsCheck2Circle, BsFunnelFill } from "react-icons/bs";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { LANGUAGE_ID } from "@/constants/language";
 import { DIFFICULTY_TEXT_COLOR } from "@/constants/style";
 import { toast } from "react-toastify";
 import PageInfo from "@/components/PageInfo";
 import Loading from "@/components/Loading";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { AxiosResponse } from "axios";
+import IUserSolvedProblems from "@/interfaces/IUserSolvedProblems";
 
 function ProblemSet() {
   const [problems, setProblems] = useState<IProblemData[]>([]);
@@ -17,10 +24,34 @@ function ProblemSet() {
   const [totalPages, setTotalPages] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user } = useSelector((state: RootState) => state.user);
+  const [userSolvedSubmissions, setUserSolvedSubmissions] =
+    useState<IUserSolvedProblems[]>();
+
+  const fetchUserSolvedSubmissions = async () => {
+    try {
+      const response: AxiosResponse = await instance.get(
+        `${SUBMISSION_SERVICE_URL}/user/get-solved-submissions`
+      );
+      console.log("UserHome submission response : ", response);
+      setUserSolvedSubmissions(response.data);
+    } catch (error: any) {
+      console.error(error);
+      if (error.status >= 400 && error.status < 500 && error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  };
+  useEffect(() => {
+    if (user) {
+      fetchUserSolvedSubmissions();
+    }
+  }, [user]);
   useEffect(() => {
     setLoader(true);
     const requestedPage = parseInt(searchParams.get("page") || "1");
-
     const fetchProblems = async () => {
       try {
         const response = await instance.get(
@@ -69,6 +100,7 @@ function ProblemSet() {
           <table className="w-full text-sm text-left rtl:text-right  dark:text-dark-600">
             <thead className="text-xs text-dark-700 uppercase bg-dark-50 dark:bg-dark-300 dark:text-white">
               <tr>
+                <th scope="col" className="px-6 py-3"></th>
                 <th scope="col" className="px-6 py-3">
                   Problem Number
                 </th>
@@ -126,39 +158,55 @@ function ProblemSet() {
               </tr>
             </thead>
             <tbody>
-              {problems.map((problem) => (
-                <tr
-                  key={problem.problemId}
-                  className="border-b dark:bg-dark-200 hover:bg-dark-100 transition-all dark:border-gray-800 cursor-pointer"
-                  onClick={() => navigate(`/problems/${problem.problemNo}`)}
-                >
-                  <th
-                    scope="row"
-                    className="px-20 py-4  whitespace-nowrap dark:text-white"
+              {problems.map((problem) => {
+                const isSolved = userSolvedSubmissions?.some(
+                  (submission) => submission.problemId === problem.problemId
+                );
+                return (
+                  <tr
+                    key={problem.problemId}
+                    className="border-b dark:bg-dark-200 hover:bg-dark-100 transition-all dark:border-gray-800 cursor-pointer"
+                    onClick={() => navigate(`/problems/${problem.problemNo}`)}
                   >
-                    {problem.problemNo}
-                  </th>
-                  <th
-                    scope="row"
-                    className="px-6 py-4  whitespace-nowrap dark:text-white"
-                  >
-                    {problem.problemName}
-                  </th>
-                  <td
-                    className={`px-6 py-4 font-bold ${
-                      DIFFICULTY_TEXT_COLOR[problem.difficulty]
-                    }`}
-                  >
-                    {problem.difficulty}
-                  </td>
-                  <td className="px-6 py-4 ">{problem.acceptanceRate} % </td>
-                  <td className="px-6 py-4">
-                    {Object.keys(LANGUAGE_ID).find(
-                      (key) => LANGUAGE_ID[key] === problem.languageId
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    <td
+                      scope="row"
+                      className="py-4 text-center  flex justify-center mx-auto whitespace-nowrap dark:text-white"
+                    >
+                      {isSolved && (
+                        <div>
+                          {" "}
+                          <BsCheck2Circle className="text-primary" />
+                        </div>
+                      )}
+                    </td>
+                    <th
+                      scope="row"
+                      className="px-20 py-4  whitespace-nowrap dark:text-white"
+                    >
+                      {problem.problemNo}
+                    </th>
+                    <th
+                      scope="row"
+                      className="px-6 py-4 whitespace-nowrap dark:text-white"
+                    >
+                      {problem.problemName}
+                    </th>
+                    <td
+                      className={`px-6 py-4 font-bold ${
+                        DIFFICULTY_TEXT_COLOR[problem.difficulty]
+                      }`}
+                    >
+                      {problem.difficulty}
+                    </td>
+                    <td className="px-6 py-4 ">{problem.acceptanceRate} % </td>
+                    <td className="px-6 py-4">
+                      {Object.keys(LANGUAGE_ID).find(
+                        (key) => LANGUAGE_ID[key] === problem.languageId
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

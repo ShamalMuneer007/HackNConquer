@@ -6,49 +6,48 @@ import React, { useEffect, useState } from "react";
 import { BsClock, BsCpu, BsMemory } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-interface Props {
-  problemInfo: IProblemData;
-  submissionResponse: SolutionResponse | null;
-}
+
 export interface ISubmissionData {
   averageMemory: number;
   averageTime: number;
   submissionStatus: string;
   submittedAt: string;
 }
-function Submissions({ problemInfo, submissionResponse }: Props) {
-  const [submissionDatas, setSubmissionDatas] = useState<ISubmissionData[]>([]);
+interface Props {
+  problemInfo: IProblemData;
+  submissionResponse: SolutionResponse | null;
+  fetchSubmissionData: () => void;
+  submissionDatas: ISubmissionData[] | undefined;
+}
+
+function Submissions({
+  problemInfo,
+  fetchSubmissionData,
+  submissionResponse,
+  submissionDatas,
+}: Props) {
   const { user } = useSelector((state: any) => state.user);
-  const fetchData = async () => {
-    try {
-      const response = await instance.get(
-        `${SUBMISSION_SERVICE_URL}/user/get-problem-submission/${problemInfo.problemId}`
-      );
-      console.log(response);
-      setSubmissionDatas(response.data);
-    } catch (e: any) {
-      toast.error(e.message);
-      console.error(e);
-    }
-  };
+
   useEffect(() => {
     if (!user) {
       return;
     }
     console.log("FROM SUBMISSIONS : ", submissionResponse);
-    fetchData();
+    fetchSubmissionData();
   }, [submissionResponse]);
   return (
     <>
       <div className="text-white p-10 font-semibold text-3xl">Submissions</div>
       <div className="">
         {!user && (
-          <div className="text-center text-gray-400 font-semibold">
+          <p className="text-center text-gray-400 font-semibold">
             Please login to see your submssions to this problem.
-          </div>
+          </p>
         )}
-        {user && !submissionDatas && (
-          <div>You have done no submssions to this problem yet!</div>
+        {user && submissionDatas?.length == 0 && (
+          <p className="dark:text-white text-center mt-2 font-bold">
+            You have done no submssions to this problem yet!
+          </p>
         )}
         {submissionDatas && submissionDatas.length > 0 && (
           <div className="overflow-x-auto">

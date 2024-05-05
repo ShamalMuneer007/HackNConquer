@@ -18,6 +18,7 @@ interface Props {
   setTestCases: Dispatch<SetStateAction<TestCase[]>>;
   setCode: Dispatch<SetStateAction<IFinalCode>>;
   setModal: Dispatch<SetStateAction<boolean>>;
+  code?: IFinalCode;
 }
 interface IFinalCode {
   originalCode: string;
@@ -30,6 +31,7 @@ function ProblemCodeCard({
   setTestCases,
   setCode,
   setModal,
+  code,
 }: Props) {
   const { error, result } = useSelector((state: any) => state.admin);
   const formik = useFormikContext();
@@ -147,7 +149,7 @@ function ProblemCodeCard({
               cursorStyle: "line",
               wordWrap: "on",
             }}
-            value={MAIN_SNIPPET[language]}
+            value={code ? code.originalCode : MAIN_SNIPPET[language]}
             onMount={handleEditorDidMount}
           />
           <div

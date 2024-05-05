@@ -38,6 +38,7 @@ const intialState: IUserState = {
   user: user,
   message: null,
   error: null,
+  solvedProblems: null,
 };
 
 const userSlice = createSlice({
@@ -62,6 +63,9 @@ const userSlice = createSlice({
     },
     setError: (state, action) => {
       state.error = action.payload;
+    },
+    setsolvedProblems: (state, action) => {
+      state.solvedProblems = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -114,8 +118,16 @@ const userSlice = createSlice({
         state.error = payload;
         console.log("Registration Rejected....", payload);
       });
+    //Solved Submission Reducers
+    // .addCase()
   },
 });
-export const { logout, setLoader, setError, setMessage, setUser } =
-  userSlice.actions;
+export const {
+  logout,
+  setLoader,
+  setError,
+  setMessage,
+  setUser,
+  setsolvedProblems,
+} = userSlice.actions;
 export default userSlice.reducer;

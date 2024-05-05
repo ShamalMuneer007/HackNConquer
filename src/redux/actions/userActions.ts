@@ -4,7 +4,10 @@ import { jwtDecode } from "jwt-decode";
 import { CustomJwtPayload } from "../../interfaces/CustomJwtPayload";
 import { getCookie, setCookie } from "typescript-cookie";
 import IUserInformation from "../../interfaces/IUserInformation";
-import { USER_SERVICE_URL } from "../../constants/service_urls";
+import {
+  SUBMISSION_SERVICE_URL,
+  USER_SERVICE_URL,
+} from "../../constants/service_urls";
 
 export const userLogin = createAsyncThunk(
   "user/userLogin",
@@ -90,6 +93,35 @@ export const userOauthLogin = createAsyncThunk(
 //         });
 //       } else {
 //         return rejectWithValue(error.message);
+//       }
+//     }
+//   }
+// );
+// export const userSolvedSubmissions = createAsyncThunk(
+//   "user/userSolvedSubmissions",
+//   async ({}, { rejectWithValue }) => {
+//     const token = getCookie("userToken");
+//     try {
+//       if (token) {
+//         const userSolvedSubmissions = await instance.get(
+//           `${SUBMISSION_SERVICE_URL}/user/get-solved-submissions`
+//         );
+//         return { data: userSolvedSubmissions };
+//       } else {
+//         console.warn("no token");
+//       }
+//     } catch (error: any) {
+//       console.error(error);
+//       if (error.response && error.response.data) {
+//         return rejectWithValue({
+//           status: error.response.status,
+//           message: error.response.data.message,
+//         });
+//       } else {
+//         return rejectWithValue({
+//           status: error.status,
+//           message: error.message,
+//         });
 //       }
 //     }
 //   }

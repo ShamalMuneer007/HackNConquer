@@ -33,7 +33,6 @@ function Login() {
     username: "",
     password: "",
   };
-  const dispatch: TypeDispatch = useDispatch();
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required!"),
     password: Yup.string().required("Password is required!"),
@@ -45,6 +44,7 @@ function Login() {
     dispatch(userLogin(userCredentials));
     resetForm();
   }
+  const dispatch: TypeDispatch = useDispatch();
   return (
     <>
       <div className="h-[98.9vh] md:px-24 px-2">

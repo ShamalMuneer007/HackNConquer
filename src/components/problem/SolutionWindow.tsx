@@ -48,7 +48,7 @@ function SolutionWindow({
 
   return (
     <div className="w-full relative  h-full">
-      <div className="w-full rounded-t-lg flex p-2 px-5 relative z-30 bg-dark-200">
+      <div className="w-full rounded-t-lg flex p-2 px-5 relative z-20 bg-dark-200">
         <span className="text-primary">
           <Code2Icon />
         </span>
