@@ -1,7 +1,7 @@
 import IUserData from "@/interfaces/IUserData";
 import profileIcon from "/profile-icon.png";
 import React, { SetStateAction, useEffect, useState, Dispatch } from "react";
-import UserProfile from "../modals/UserProfile";
+import UserProfile from "../user/modal/UserProfile";
 interface Props {
   searchDatas: IUserData[] | null;
   setUserInfo: Dispatch<SetStateAction<IUserData | null>>;

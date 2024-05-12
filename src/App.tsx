@@ -27,6 +27,9 @@ import { RootState } from "./redux/store/store";
 import Notifications from "./components/notification/Notification";
 import ClanLeaderboard from "./pages/auth/Leaderboard/ClanLeaderboard";
 import FriendsLeaderboard from "./pages/auth/Leaderboard/FriendsLeaderboard";
+import Clan from "./pages/Clan/Clan";
+import PaymentSuccess from "./pages/payment/PaymentSuccess";
+import CreateClan from "./pages/Clan/CreateClan";
 
 function App() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -127,6 +130,13 @@ function App() {
           <Route index element={user ? <UserHome /> : <Landing />}></Route>
           <Route path="problems" element={<ProblemSet />}></Route>
           <Route path="problems/:problemNumber" element={<Problem />}></Route>
+          <Route path="clan">
+            <Route index element={<Clan />}></Route>
+            <Route
+              path="create"
+              element={<ProtectedRoute element={<CreateClan />} />}
+            ></Route>
+          </Route>
           <Route
             path="premium/subscribe"
             element={<ProtectedRoute element={<></>} />}
@@ -139,10 +149,11 @@ function App() {
               element={<ProtectedRoute element={<FriendsLeaderboard />} />}
             ></Route>
             <Route
-              path="clan"
+              path="clans"
               element={<ProtectedRoute element={<ClanLeaderboard />} />}
             ></Route>
           </Route>
+          <Route path="payment/success" element={<PaymentSuccess />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Route>
       </Routes>

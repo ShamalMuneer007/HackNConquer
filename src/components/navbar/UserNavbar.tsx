@@ -3,8 +3,8 @@ import Logo from "../Logo/Logo";
 import { useSelector } from "react-redux";
 import profileIcon from "/profile-icon.png";
 import { useEffect, useState } from "react";
-import UserProfile from "../modals/UserProfile";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import UserProfile from "../user/modal/UserProfile";
+import { FaMagnifyingGlass, FaMessage } from "react-icons/fa6";
 import { useDebounce } from "@/hooks/useDebounce";
 import instance from "@/config/axiosConfig";
 import { USER_SERVICE_URL } from "@/constants/service_urls";
@@ -152,7 +152,7 @@ function UserNavbar() {
             Leaderboards
           </NavLink>
           <NavLink
-            to="/clans"
+            to="/clan"
             end
             className={({ isActive }) =>
               `transition-color duration-300 hover:bg-gray-800/20  ${
@@ -162,28 +162,30 @@ function UserNavbar() {
           >
             Clan
           </NavLink>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <FaMagnifyingGlass className="text-gray-300" />
+          {user && (
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <FaMagnifyingGlass className="text-gray-300" />
+              </div>
+              <input
+                className="block w-full h-10 pl-10 pr-3 py-2 border focus:border-none bg-transparent rounded-md text-white placeholder-white focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-offset-primary focus:ring-primary placeholder:text-gray-400/60"
+                placeholder="Search..."
+                value={searchKeyword}
+                onChange={searchInputChangeHandler}
+              />
+              {searchKeyword && (
+                <>
+                  <div className="absolute w-full top-[100%]">
+                    <SearchOutput
+                      setUserInfo={setModalInfo}
+                      searchDatas={searchResultData}
+                      setShowProfileModal={setShowModal}
+                    />
+                  </div>
+                </>
+              )}
             </div>
-            <input
-              className="block w-full h-10 pl-10 pr-3 py-2 border focus:border-none bg-transparent rounded-md text-white placeholder-white focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-offset-primary focus:ring-primary placeholder:text-gray-400/60"
-              placeholder="Search..."
-              value={searchKeyword}
-              onChange={searchInputChangeHandler}
-            />
-            {searchKeyword && (
-              <>
-                <div className="absolute w-full top-[100%]">
-                  <SearchOutput
-                    setUserInfo={setModalInfo}
-                    searchDatas={searchResultData}
-                    setShowProfileModal={setShowModal}
-                  />
-                </div>
-              </>
-            )}
-          </div>
+          )}
         </div>
         <div className=" flex justify-start">
           {user ? (
@@ -222,6 +224,9 @@ function UserNavbar() {
           )}
         </div>
       </div>
+      <button className="fixed bottom-6 border borde-white rounded-full bg-dark-300 p-4 text-center flex items-center justify-center right-10 text-white">
+        <FaMessage />
+      </button>
       <Outlet />
     </div>
   );

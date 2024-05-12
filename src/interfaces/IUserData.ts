@@ -6,8 +6,9 @@ export default interface IUserData {
   email: string;
   level: number;
   xp: number;
-  isPremium: boolean;
+  premium: boolean;
   role: string;
   currentMaxXp: number;
+  clanId: number | null;
   friends: IUserData[];
 }
