@@ -2,8 +2,9 @@ import React from "react";
 import { Rings } from "react-loader-spinner";
 interface Props {
   loading: boolean;
+  children?: JSX.Element;
 }
-function Loading({ loading }: Props) {
+function Loading({ loading, children }: Props) {
   return (
     <div>
       {loading && (
@@ -17,6 +18,7 @@ function Loading({ loading }: Props) {
             wrapperStyle={{}}
             wrapperClass=""
           />
+          {children}
         </div>
       )}
     </div>

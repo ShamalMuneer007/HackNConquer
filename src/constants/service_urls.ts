@@ -7,3 +7,5 @@ export const CLAN_SERVICE_URL = "/clan/api/v1";
 export const LEADERBOARD_SERVICE_URL = "/leaderboard/api/v1";
 export const DISCUSSION_SERVICE_URL = "/discussion/api/v1";
 export const PAYMENT_SERVICE_URL = "/payment/api/v1";
+export const NOTIFICATION_SERVICE_URL = "/notification/api/v1";
+export const CHAT_SERVICE_URL = "chat";

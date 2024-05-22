@@ -4,7 +4,12 @@ import { RootState } from "@/redux/store/store";
 import { Line } from "rc-progress";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BsPower } from "react-icons/bs";
-import { FaPencil, FaUserPlus, FaUserXmark } from "react-icons/fa6";
+import {
+  FaMoneyBill,
+  FaPencil,
+  FaUserPlus,
+  FaUserXmark,
+} from "react-icons/fa6";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import profileIcon from "/profile-icon.png";
@@ -12,6 +17,7 @@ import instance from "@/config/axiosConfig";
 import { USER_SERVICE_URL } from "@/constants/service_urls";
 import { toast } from "react-toastify";
 import { AxiosResponse } from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 interface Props {
   setShowModal: Dispatch<SetStateAction<boolean>>;
   userInfo: IUserData;
@@ -23,6 +29,7 @@ function UserProfile({ setShowModal, userInfo }: Props) {
   const [friends, setFriends] = useState<IUserData[] | null>(null);
   const [status, setStatus] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const getFriends = async () => {
     try {
       const response: AxiosResponse = await instance.get(
@@ -292,13 +299,23 @@ function UserProfile({ setShowModal, userInfo }: Props) {
           </div>
         )}
         {user?.userId === userInfo.userId && (
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex justify-center gap-10 items-center">
             <button
               onClick={() => dispatch(logout())}
               className="hover:bg-red-600 text-red-600 border-red-600 transition-colors border hover:text-white rounded-lg p-2 flex justify-center items-center gap-2 text-sm font-bold"
             >
               <BsPower className="text-lg" />
               Logout
+            </button>
+            <button
+              onClick={() => {
+                navigate("/subscription/info");
+                setShowModal(false);
+              }}
+              className="hover:bg-blue-600 text-blue-600 border-blue-600 transition-colors border hover:text-white rounded-lg p-2 flex justify-center items-center gap-2 text-sm font-bold"
+            >
+              <FaMoneyBill className="text-lg" />
+              Subscriptions
             </button>
           </div>
         )}

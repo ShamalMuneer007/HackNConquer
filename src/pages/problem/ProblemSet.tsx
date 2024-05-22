@@ -36,6 +36,10 @@ function ProblemSet() {
       console.log("UserHome submission response : ", response);
       setUserSolvedSubmissions(response.data);
     } catch (error: any) {
+      if (!error.response || !error.response.data) {
+        toast.error("Network error!");
+        return;
+      }
       console.error(error);
       if (error.status >= 400 && error.status < 500 && error.response) {
         toast.error(error.response.data.message);

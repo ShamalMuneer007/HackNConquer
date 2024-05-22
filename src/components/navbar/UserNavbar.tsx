@@ -4,13 +4,16 @@ import { useSelector } from "react-redux";
 import profileIcon from "/profile-icon.png";
 import { useEffect, useState } from "react";
 import UserProfile from "../user/modal/UserProfile";
-import { FaMagnifyingGlass, FaMessage } from "react-icons/fa6";
+import { FaBell, FaMagnifyingGlass, FaMessage } from "react-icons/fa6";
 import { useDebounce } from "@/hooks/useDebounce";
 import instance from "@/config/axiosConfig";
 import { USER_SERVICE_URL } from "@/constants/service_urls";
 import IUserData from "@/interfaces/IUserData";
 import { toast } from "react-toastify";
 import SearchOutput from "./SearchOutput";
+import Chat from "../chat/Chat";
+import { FaRegWindowClose, FaWindowClose } from "react-icons/fa";
+import { IoMdClose, IoMdCloseCircle } from "react-icons/io";
 function UserNavbar() {
   const activeNavLinkStyle =
     "text-primary underline bg-gray-800/20 rounded p-3  underline-offset-8";
@@ -23,6 +26,7 @@ function UserNavbar() {
     null
   );
   const [modalInfo, setModalInfo] = useState<IUserData | null>(null);
+  const [messageModal, setMessageModal] = useState(false);
   const debouncedSearchKeyword = useDebounce(searchKeyword, 300);
   useEffect(() => {
     const fetchSearchData = async () => {
@@ -95,14 +99,14 @@ function UserNavbar() {
         </div>
       </div>
 
-      <div className="hidden text-sm w-screen backdrop-blur-md  lg:flex z-50 items-center py-3 px-20 bg-gray-900/50 left-0 h-16 fixed top-0">
-        <div className="text-white flex items-center">
-          <Link to={"/"} className="w-[45%] pt-2">
-            <Logo />
-          </Link>
-        </div>
+      <div className="hidden text-sm w-screen backdrop-blur-md lg:flex z-50 items-center py-3 px-20 bg-gray-900/50 left-0 h-16 fixed top-0">
+        {/* <div className="text-white  flex items-center"> */}
+        <Link to={"/"} className="w-[20%] pt-2 me-20">
+          <Logo />
+        </Link>
+        {/* </div> */}
 
-        <div className="flex text-white w-full justify-startl gap-5">
+        <div className="flex text-white w-full justify-start gap-5">
           <NavLink
             to="/"
             end
@@ -152,6 +156,19 @@ function UserNavbar() {
             Leaderboards
           </NavLink>
           <NavLink
+            to="/friends"
+            end
+            className={({ isActive }) =>
+              `transition-color duration-300 hover:bg-gray-800/20  ${
+                isActive || window.location.pathname.startsWith("/friends")
+                  ? activeNavLinkStyle
+                  : notActiveLinkstyle
+              }`
+            }
+          >
+            Friends
+          </NavLink>
+          <NavLink
             to="/clan"
             end
             className={({ isActive }) =>
@@ -162,6 +179,7 @@ function UserNavbar() {
           >
             Clan
           </NavLink>
+
           {user && (
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -189,22 +207,30 @@ function UserNavbar() {
         </div>
         <div className=" flex justify-start">
           {user ? (
-            <button
-              onClick={() => {
-                setShowModal(true);
-                setModalInfo(user);
-              }}
-              className="text-white hover:text-red-500 transition-colors flex items-center gap-3"
-            >
-              {user.username}
-              {/* Logout */}
-              <img
-                src={user.profileImage ? user.profileImage : profileIcon}
-                className="rounded-full"
-                width={"35px"}
-                height={"35px"}
-              />
-            </button>
+            <div className="flex items-center gap-10">
+              <Link
+                to={"/notifications"}
+                className="border rounded-full p-2 hover:border-primary hover:text-primary transition-colors text-white"
+              >
+                <FaBell />
+              </Link>
+              <button
+                onClick={() => {
+                  setShowModal(true);
+                  setModalInfo(user);
+                }}
+                className="text-white hover:text-red-500 transition-colors flex items-center gap-3"
+              >
+                {user.username}
+                {/* Logout */}
+                <img
+                  src={user.profileImage ? user.profileImage : profileIcon}
+                  className="rounded-full"
+                  width={"35px"}
+                  height={"35px"}
+                />
+              </button>
+            </div>
           ) : (
             <div className="flex text-white gap-4">
               <Link
@@ -224,9 +250,21 @@ function UserNavbar() {
           )}
         </div>
       </div>
-      <button className="fixed bottom-6 border borde-white rounded-full bg-dark-300 p-4 text-center flex items-center justify-center right-10 text-white">
-        <FaMessage />
-      </button>
+      {user && (
+        <button
+          onClick={() => setMessageModal((modal) => !modal)}
+          className="fixed bottom-6 border border-white rounded-full z-40 bg-dark-300 p-4 text-center flex items-center justify-center right-10 text-white"
+        >
+          {!messageModal ? <FaMessage /> : <IoMdClose />}
+        </button>
+      )}
+      {user && messageModal && (
+        <div className="fixed bottom-10 right-24 z-30">
+          {" "}
+          <Chat />{" "}
+        </div>
+      )}
+
       <Outlet />
     </div>
   );

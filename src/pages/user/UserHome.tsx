@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
 import IUserSolvedProblems from "@/interfaces/IUserSolvedProblems";
 import { DIFFICULTY_TEXT_COLOR } from "@/constants/style";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LANGUAGE_ID } from "@/constants/language";
 import UserSolvedSubmissions from "@/components/user/UserSolvedSubmissions";
 
@@ -84,15 +84,19 @@ function UserHome() {
               <div className="font-bold">Global Rank : #{user?.playerRank}</div>
             </div>
             <div className="justify-center text-center h-full  w-full p-10 flex items-center">
-              <div className="font-bold">Global Rank : #{user?.playerRank}</div>
+              <div className="font-bold">
+                Friends Rank : #{user?.playerRank}
+              </div>
             </div>
             {user?.clanId ? (
-              <></>
+              <p>Clan Rank : #{user.playerRank}</p>
             ) : (
               <div className=" w-full flex justify-center">
-                <button className="bg-green-500 hover:bg-primary transition-colors rounded text-white font-bold p-2">
-                  Join a clan
-                </button>
+                <Link to="/clan">
+                  <button className="bg-green-500 hover:bg-primary transition-colors rounded text-white font-bold p-2">
+                    Join a clan
+                  </button>
+                </Link>
               </div>
             )}
           </div>

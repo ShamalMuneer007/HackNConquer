@@ -8,7 +8,7 @@ import { FaCrown } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-interface IGlobalLeaderboardData {
+export interface IGlobalLeaderboardData {
   username: string;
   profileImage: string;
   playerRank: number;
@@ -35,6 +35,10 @@ function GlobalLeaderboard() {
       } else {
       }
     } catch (error: any) {
+      if (!error.response || !error.response.data) {
+        toast.error("Network error!");
+        return;
+      }
       if (
         error.response &&
         error.response.status >= 400 &&

@@ -30,6 +30,11 @@ import FriendsLeaderboard from "./pages/auth/Leaderboard/FriendsLeaderboard";
 import Clan from "./pages/Clan/Clan";
 import PaymentSuccess from "./pages/payment/PaymentSuccess";
 import CreateClan from "./pages/Clan/CreateClan";
+import JoinClan from "./pages/Clan/JoinClan";
+import Friends from "./pages/friends/Friends";
+import Notification from "./pages/notifications/Notification";
+import UserSubscriptionInfo from "./pages/user/UserSubscriptionInfo";
+import { ChatProvider } from "./contexts/useChatContext";
 
 function App() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -53,110 +58,129 @@ function App() {
       <Navigate to="/login" />
     );
   };
+
   return (
     <>
-      <Notifications />
-      <ToastContainer theme="dark" />
-      <Routes>
-        {/* Auth Routes */}
-        <Route
-          path="/login"
-          element={
-            !user ? (
-              <Login />
-            ) : user.role === "ROLE_ADMIN" ? (
-              <Navigate to="/admin" />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            !user ? (
-              <Signup />
-            ) : user.role === "ROLE_ADMIN" ? (
-              <Navigate to="/admin/dashboard" />
-            ) : (
-              <Navigate to="/user/dashboard" />
-            )
-          }
-        ></Route>
-
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={<AdminProtectedRoute element={<AdminNavbar />} />}
-        >
+      <ChatProvider user={user}>
+        <Notifications />
+        <ToastContainer theme="dark" />
+        <Routes>
+          {/* Auth Routes */}
           <Route
-            index
-            element={<AdminProtectedRoute element={<AdminDashboard />} />}
-          ></Route>
+            path="/login"
+            element={
+              !user ? (
+                <Login />
+              ) : user.role === "ROLE_ADMIN" ? (
+                <Navigate to="/admin" />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
           <Route
-            path="users"
-            element={<AdminProtectedRoute element={<Users />} />}
-          ></Route>
-          <Route
-            path="problems"
-            element={<AdminProtectedRoute element={<AdminProblems />} />}
-          ></Route>
-          <Route
-            path="problems/add-problem"
-            element={<AdminProtectedRoute element={<AddProblem />} />}
-          ></Route>
-          <Route
-            path="problems/problem-details/:problemId"
-            element={<AdminProtectedRoute element={<ProblemDetails />} />}
-          ></Route>
-          <Route
-            path="problems/edit-problem/:problemId"
-            element={<AdminProtectedRoute element={<EditProblem />} />}
-          ></Route>
-          <Route
-            path="categories"
-            element={<AdminProtectedRoute element={<AdminCategories />} />}
+            path="/signup"
+            element={
+              !user ? (
+                <Signup />
+              ) : user.role === "ROLE_ADMIN" ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <Navigate to="/user/dashboard" />
+              )
+            }
           ></Route>
 
+          {/* Admin Routes */}
           <Route
-            path="categories/add-category"
-            element={<AdminProtectedRoute element={<AddCategory />} />}
-          ></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Route>
-
-        {/* User Routes */}
-        <Route path="/" element={<UserNavbar />}>
-          <Route index element={user ? <UserHome /> : <Landing />}></Route>
-          <Route path="problems" element={<ProblemSet />}></Route>
-          <Route path="problems/:problemNumber" element={<Problem />}></Route>
-          <Route path="clan">
-            <Route index element={<Clan />}></Route>
+            path="/admin"
+            element={<AdminProtectedRoute element={<AdminNavbar />} />}
+          >
             <Route
-              path="create"
-              element={<ProtectedRoute element={<CreateClan />} />}
+              index
+              element={<AdminProtectedRoute element={<AdminDashboard />} />}
             ></Route>
+            <Route
+              path="users"
+              element={<AdminProtectedRoute element={<Users />} />}
+            ></Route>
+            <Route
+              path="problems"
+              element={<AdminProtectedRoute element={<AdminProblems />} />}
+            ></Route>
+            <Route
+              path="problems/add-problem"
+              element={<AdminProtectedRoute element={<AddProblem />} />}
+            ></Route>
+            <Route
+              path="problems/problem-details/:problemId"
+              element={<AdminProtectedRoute element={<ProblemDetails />} />}
+            ></Route>
+            <Route
+              path="problems/edit-problem/:problemId"
+              element={<AdminProtectedRoute element={<EditProblem />} />}
+            ></Route>
+            <Route
+              path="categories"
+              element={<AdminProtectedRoute element={<AdminCategories />} />}
+            ></Route>
+
+            <Route
+              path="categories/add-category"
+              element={<AdminProtectedRoute element={<AddCategory />} />}
+            ></Route>
+            <Route path="*" element={<NotFound />}></Route>
           </Route>
-          <Route
-            path="premium/subscribe"
-            element={<ProtectedRoute element={<></>} />}
-          ></Route>
-          <Route path="/leaderboard">
-            <Route index element={<Leaderboard />}></Route>
-            <Route path="global" element={<GlobalLeaderboard />}></Route>
+
+          {/* User Routes */}
+          <Route path="/" element={<UserNavbar />}>
+            <Route index element={user ? <UserHome /> : <Landing />}></Route>
+            <Route path="problems" element={<ProblemSet />}></Route>
+            <Route path="problems/:problemNumber" element={<Problem />}></Route>
+            <Route path="clan">
+              <Route index element={<Clan />}></Route>
+              <Route
+                path="create"
+                element={<ProtectedRoute element={<CreateClan />} />}
+              ></Route>
+              <Route
+                path="join/:clanId"
+                element={<ProtectedRoute element={<JoinClan />} />}
+              ></Route>
+            </Route>
+            <Route
+              path="premium/subscribe"
+              element={<ProtectedRoute element={<></>} />}
+            ></Route>
+            <Route
+              path="subscription/info"
+              element={<ProtectedRoute element={<UserSubscriptionInfo />} />}
+            ></Route>
             <Route
               path="friends"
-              element={<ProtectedRoute element={<FriendsLeaderboard />} />}
+              element={<ProtectedRoute element={<Friends />} />}
             ></Route>
+            <Route path="/leaderboard">
+              <Route index element={<Leaderboard />}></Route>
+              <Route path="global" element={<GlobalLeaderboard />}></Route>
+              <Route
+                path="friends"
+                element={<ProtectedRoute element={<FriendsLeaderboard />} />}
+              ></Route>
+              <Route
+                path="clans"
+                element={<ProtectedRoute element={<ClanLeaderboard />} />}
+              ></Route>
+            </Route>
+            <Route path="payment/success" element={<PaymentSuccess />}></Route>
             <Route
-              path="clans"
-              element={<ProtectedRoute element={<ClanLeaderboard />} />}
+              path="notifications"
+              element={<ProtectedRoute element={<Notification />} />}
             ></Route>
+            <Route path="*" element={<NotFound />}></Route>
           </Route>
-          <Route path="payment/success" element={<PaymentSuccess />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </ChatProvider>
     </>
   );
 }

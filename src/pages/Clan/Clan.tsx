@@ -1,3 +1,4 @@
+import ClanInfo from "@/components/clan/ClanInfo";
 import PremiumModal from "@/components/user/modal/PremiumModal";
 import instance from "@/config/axiosConfig";
 import { CLAN_SERVICE_URL } from "@/constants/service_urls";
@@ -27,6 +28,10 @@ function Clan() {
       } catch (error: any) {
         toast.dismiss();
         console.error(error);
+        if (!error.response || !error.response.data) {
+          toast.error("Network error!");
+          return;
+        }
         if (error && error.response && error.response.data) {
           toast.error("Something went wrong while doing search");
         } else {
@@ -76,7 +81,9 @@ function Clan() {
         </div>
       )}
       {user && user.clanId ? (
-        <></>
+        <div className="mt-20">
+          <ClanInfo />
+        </div>
       ) : (
         <div className="flex flex-col justify-center w-full h-[67vh] items-center">
           <p className="font-bold text-3xl">You are not joined in any clan!</p>

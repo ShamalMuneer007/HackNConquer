@@ -55,6 +55,10 @@ function Problem() {
         setProblemInfo(response.data);
       }
     } catch (error: any) {
+      if (!error.response || !error.response.data) {
+        toast.error("Network error!");
+        return;
+      }
       if (error.response) {
         toast.error(error.response.data.message);
       } else {

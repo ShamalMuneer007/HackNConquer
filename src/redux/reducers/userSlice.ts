@@ -46,6 +46,11 @@ const userSlice = createSlice({
   initialState: intialState,
   reducers: {
     logout: (state) => {
+      instance
+        .post(`${USER_SERVICE_URL}/auth/logout/${state.user?.userId}`)
+        .catch((e) => {
+          console.error(e.message);
+        });
       removeCookie("userToken");
       state.loading = false;
       state.user = null;
