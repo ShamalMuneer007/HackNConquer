@@ -15,7 +15,7 @@ function Chat() {
   const [selectedUser, setSelectedUser] = useState<IUserData | null>(null);
   const [friends, setFriends] = useState<IUserData[]>([]);
   const { user } = useSelector((state: RootState) => state.user);
-  const { onlineUsers } = useChatContext();
+  const { onlineUsers, newMessages, setNewMessages } = useChatContext();
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchFriends = async () => {
@@ -41,42 +41,86 @@ function Chat() {
         }
       }
     };
+
     fetchFriends();
   }, []);
   useEffect(() => {
+    const fetchNewMessages = async () => {
+      if (friends && friends.length > 0) {
+        try {
+          const friendsId: number[] = friends.map((friend) => friend.userId);
+          const response = await instance.post(
+            `/chat/api/messages/new/${user?.userId}`,
+            friendsId
+          );
+          console.log("Find Message Response : ", response);
+          if (newMessages.length === 0) {
+            setNewMessages(response.data);
+          }
+        } catch (e: any) {
+          if (e.status === 401 || e.status === 403) {
+            dispatch(logout());
+          }
+          toast.error("Something went wrong while fetching online users");
+        }
+      }
+    };
+    fetchNewMessages();
+  }, [friends]);
+  useEffect(() => {
+    console.log("NEW MESSAGES : ", newMessages);
+  }, [newMessages]);
+  useEffect(() => {
     console.log("CHAT ONLINE :", onlineUsers);
   }, [onlineUsers]);
+
   return (
-    <div className="bg-dark-300 border-primary border w-[20vw] text-white p-5 pt-5 h-[70vh]  rounded-md">
+    <div className="bg-dark-300 border-primary border w-[30vw] text-white py-5 px-0 h-[70vh]  rounded-md">
       {selectedUser ? (
         <Message
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
         />
       ) : (
-        <>
+        <div className="px-6 pt-2">
           <h2 className="font-bold text-xl"> Messages</h2>
           <div className="mt-5 overflow-y-scroll">
             {friends.map((friend, index) => (
-              <>
+              <div key={friend.userId}>
                 <div
                   className="flex gap-5 items-center p-5 hover:bg-dark-200 cursor-pointer rounded-lg"
                   onClick={() => setSelectedUser(friend)}
                 >
-                  <img
-                    src={friend.profileImage || profileImage}
-                    className="w-10 h-10 rounded-full"
-                    referrerPolicy="no-referrer"
-                  ></img>
+                  <div className="flex relative">
+                    <img
+                      src={friend.profileImage || profileImage}
+                      className="w-10 h-10 rounded-full border border-gray-600"
+                      referrerPolicy="no-referrer"
+                    ></img>
+                    <div
+                      className={`rounded-full absolute bottom-0 right-0.5 p-[0.3rem] ${
+                        onlineUsers.includes(friend.userId)
+                          ? "bg-green-400"
+                          : "bg-gray-300"
+                      }`}
+                    ></div>
+                  </div>
                   <p>{friend.username}</p>
+                  {newMessages.map(
+                    (newMessage, index) =>
+                      newMessage.userId === friend.userId && (
+                        <>
+                          <div className="rounded-full h-[20px] w-[20px] text-center flex items-center justify-center bg-red-500 text-xs">
+                            <div>{newMessage.count}</div>
+                          </div>
+                        </>
+                      )
+                  )}
                 </div>
-                <div className="flex flex-col">
-                  {onlineUsers.includes(friend.userId) ? "Online" : "Offline"}
-                </div>
-              </>
+              </div>
             ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const withMT = require("@material-tailwind/react/utils/withMT");
+import daisyui from "daisyui";
 export default withMT({
   content: [
     "./index.html",
@@ -31,5 +32,5 @@ export default withMT({
       },
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [require("tailwind-scrollbar-hide"), daisyui],
 });

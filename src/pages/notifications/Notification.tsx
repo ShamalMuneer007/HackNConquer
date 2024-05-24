@@ -73,15 +73,16 @@ function Notification() {
                 },
                 {}
               )
-            ).map(([date, notifications]) => (
-              <div key={date}>
+            ).map(([date, notifications], index) => (
+              <div className={`${index > 0 && "mt-10"}`} key={date}>
                 <h3 className="text-xl font-bold mb-4">{date}</h3>
                 <hr></hr>
                 {notifications.map((notification, index) => (
-                  <div className="mt-5" key={index}>
+                  <div className="mt-7" key={index}>
                     {notification.body}
                   </div>
                 ))}
+                <div className="bg-gray-700 text-gray-900 w-full p-[0.05rem] mt-5"></div>
               </div>
             ))}
         </div>

@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </GoogleOAuthProvider>
     </Provider>
   </BrowserRouter>
-  // </React.StrictMode>
+  // {/* </React.StrictMode> */}
 );

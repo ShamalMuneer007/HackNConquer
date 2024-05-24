@@ -64,6 +64,7 @@ const Notifications = () => {
             title: payload.notification.title || "",
             body: payload.notification.body || "",
           });
+
           toast.info(
             `${payload.notification.title} \n, ${payload.notification.body}`,
             {
