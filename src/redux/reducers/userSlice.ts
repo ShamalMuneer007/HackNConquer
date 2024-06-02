@@ -13,12 +13,13 @@ import { USER_SERVICE_URL } from "@/constants/service_urls";
 import { useRouteLoaderData } from "react-router-dom";
 import IUserState from "@/interfaces/IUserState";
 
-const token = getCookie("userToken");
+const token = localStorage.getItem("userToken");
 let user = null;
 if (token) {
   const decoded = jwtDecode<CustomJwtPayload>(token);
   if (decoded.exp * 1000 < Date.now()) {
     console.log("Unauthorized request!");
+    localStorage.removeItem("userToken");
     removeCookie("userToken");
   } else {
     try {
@@ -52,6 +53,7 @@ const userSlice = createSlice({
           console.error(e.message);
         });
       removeCookie("userToken");
+      localStorage.removeItem("userToken");
       state.loading = false;
       state.user = null;
       state.error = null;

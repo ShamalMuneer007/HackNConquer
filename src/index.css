@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-root {
-  @apply bg-dark-200;
-}
 .page-padding {
   @apply px-24 py-24;
 }

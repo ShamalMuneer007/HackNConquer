@@ -38,13 +38,6 @@ import { ChatProvider } from "./contexts/useChatContext";
 
 function App() {
   const { user } = useSelector((state: RootState) => state.user);
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/login");
-  //   }
-  //   console.log("User data : ", user);
-  // }, [user]);
   useEffect(() => {
     console.log("USER : ", user);
   }, [user]);
@@ -58,10 +51,18 @@ function App() {
       <Navigate to="/login" />
     );
   };
-
+  const WithAuthProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+  }) => {
+    return user ? (
+      <ChatProvider user={user}>{children}</ChatProvider>
+    ) : (
+      <>{children}</>
+    );
+  };
   return (
     <>
-      <ChatProvider user={user}>
+      <WithAuthProvider>
         <Notifications />
         <ToastContainer theme="dark" />
         <Routes>
@@ -180,7 +181,7 @@ function App() {
             <Route path="*" element={<NotFound />}></Route>
           </Route>
         </Routes>
-      </ChatProvider>
+      </WithAuthProvider>
     </>
   );
 }

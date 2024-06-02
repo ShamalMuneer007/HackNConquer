@@ -178,6 +178,7 @@ function UserProfile({ setShowModal, userInfo }: Props) {
               className="w-28 rounded-full"
               onLoad={handleImageLoad}
               style={{ display: isImageLoaded ? "block" : "none" }}
+              referrerPolicy="no-referrer"
             />
             {user?.userId === userInfo.userId && (
               <div className="bg-dark-300 rounded-full absolute right-0 p-2  hover:text-primary cursor-pointer bottom-0 ">

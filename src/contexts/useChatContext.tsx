@@ -61,7 +61,7 @@ export const ChatProvider: React.FC<{
     if (!user) {
       return;
     }
-    const socket = new SockJS("http://localhost:9800/chat/ws");
+    const socket = new SockJS("https://www.needus.store/chat/ws");
     const stompClient = Stomp.over(socket);
     stompClient.connect(
       { "user-id": user.userId.toString() },

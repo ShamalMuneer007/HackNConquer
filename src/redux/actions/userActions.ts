@@ -1,13 +1,7 @@
 import instance from "../../config/axiosConfig";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { jwtDecode } from "jwt-decode";
-import { CustomJwtPayload } from "../../interfaces/CustomJwtPayload";
-import { getCookie, setCookie } from "typescript-cookie";
 import IUserInformation from "../../interfaces/IUserInformation";
-import {
-  SUBMISSION_SERVICE_URL,
-  USER_SERVICE_URL,
-} from "../../constants/service_urls";
+import { USER_SERVICE_URL } from "../../constants/service_urls";
 
 export const userLogin = createAsyncThunk(
   "user/userLogin",
@@ -21,13 +15,13 @@ export const userLogin = createAsyncThunk(
           "Content-Type": "application/json",
         },
       };
-      const response = await instance.post(
+      const loginResponse = await instance.post(
         USER_SERVICE_URL + "/auth/login",
         userCredentials,
         config
       );
-      const data = response.data;
-      setCookie("userToken", data.accessToken);
+      console.log("LOGIN RESPONSE : ", loginResponse.data.accessToken);
+      localStorage.setItem("userToken", loginResponse.data.accessToken);
       const userInfoResponse = await instance.get(
         `${USER_SERVICE_URL}/user/fetch-userdata`
       );
@@ -52,13 +46,13 @@ export const userOauthLogin = createAsyncThunk(
           "Content-Type": "application/json",
         },
       };
-      const response = await instance.post(
+      const loginResponse = await instance.post(
         USER_SERVICE_URL + "/auth/google/oauth/login",
         oauthToken,
         config
       );
-      const data = response.data;
-      setCookie("userToken", data.accessToken);
+      console.log("LOGIN RESPONSE : ", loginResponse.data.accessToken);
+      localStorage.setItem("userToken", loginResponse.data.accessToken);
       const userInfoResponse = await instance.get(
         `${USER_SERVICE_URL}/user/fetch-userdata`
       );
@@ -144,7 +138,8 @@ export const userRegister = createAsyncThunk(
         return rejectWithValue(response.data.error);
       }
       if (response.data.accessToken) {
-        setCookie("userToken", response.data.accessToken);
+        console.log("LOGIN RESPONSE : ", response.data.accessToken);
+        localStorage.setItem("userToken", response.data.accessToken);
         const userInfoResponse = await instance.get(
           `${USER_SERVICE_URL}/user/fetch-userdata`
         );

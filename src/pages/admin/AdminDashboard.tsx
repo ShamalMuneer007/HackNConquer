@@ -25,8 +25,10 @@ function AdminDashboard() {
   const [paymentInterval, setPaymentInterval] = useState("yearly");
   const [problemCount, setProblemCount] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
+  const [activeSubscriptions, setActiveSubscriptions] = useState<number>(0);
   const [graphData, setGraphData] = useState<any>();
   const dispatch = useDispatch();
+  const [totalRevenue, setTotalRevenue] = useState<number>();
   const prepareData = (data: any, interval: string) => {
     const result = [];
     const currentYear = new Date().getFullYear();
@@ -111,76 +113,75 @@ function AdminDashboard() {
       setGraphData(data);
     }
   }, [revenueData]);
-  const fetchUserCount = async () => {
+  const fetchData = async (
+    url: string,
+    successCallback: (data: any) => void
+  ) => {
     try {
-      const response = await instance.get(`${USER_SERVICE_URL}/user-count`);
-      response.status === 200 && setUserCount(response.data.userCount);
+      const response = await instance.get(url);
+      if (response.status === 200) {
+        successCallback(response.data);
+      } else {
+        toast.error("Something went wrong on our side..");
+      }
     } catch (error: any) {
       if (error.status === 401 || error.status === 403) {
         dispatch(logout());
       } else if (error.status >= 400 && error.status < 500) {
         toast.error(error.response.data.message);
-      } else {
+      } else if (error.status > 500) {
         toast.error("Something went wrong on our side..");
+      } else {
+        toast.error(error.message);
       }
     }
   };
-  const fetchProblemCount = async () => {
-    try {
-      const response = await instance.get(
-        `${PROBLEM_SERVICE_URL}/count/problem`
-      );
-      response.status === 200 && setProblemCount(response.data.problemCount);
-    } catch (error: any) {
-      if (error.status === 401 || error.status === 403) {
-        dispatch(logout());
-      } else if (error.status >= 400 && error.status < 500) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Something went wrong on our side..");
-      }
-    }
+
+  const fetchUserCount = () => {
+    fetchData(`${USER_SERVICE_URL}/user-count`, (data) =>
+      setUserCount(data.userCount)
+    );
   };
-  const fetchUserAuditLogs = async () => {
-    try {
-      const response = await instance.get(
-        `${USER_SERVICE_URL}/admin/audit-logs`
-      );
-      response.status === 200 && setUserAuditLogs(response.data);
-    } catch (error: any) {
-      if (error.status === 401 || error.status === 403) {
-        dispatch(logout());
-      } else if (error.status >= 400 && error.status < 500) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Something went wrong on our side..");
-      }
-    }
+
+  const fetchProblemCount = () => {
+    fetchData(`${PROBLEM_SERVICE_URL}/count/problem`, (data) =>
+      setProblemCount(data.problemCount)
+    );
   };
-  const fetchPaymentInfo = async () => {
-    try {
-      const response = await instance.get(
-        `${PAYMENT_SERVICE_URL}/admin/revenue?interval=${
-          paymentInterval || "yearly"
-        }`
-      );
-      console.log("Revenue Response : ", response.data);
-      response.status === 200 && setRevenueData(response.data);
-    } catch (error: any) {
-      if (error.status === 401 || error.status === 403) {
-        dispatch(logout());
-      } else if (error.status >= 400 && error.status < 500) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Something went wrong on our side..");
-      }
-    }
+
+  const fetchActiveSubscriptions = () => {
+    fetchData(`${PAYMENT_SERVICE_URL}/admin/subscriptions/active`, (data) =>
+      setActiveSubscriptions(data)
+    );
+  };
+
+  const fetchUserAuditLogs = () => {
+    fetchData(`${USER_SERVICE_URL}/admin/audit-logs`, (data) =>
+      setUserAuditLogs(data)
+    );
+  };
+
+  const fetchTotalRevenue = () => {
+    fetchData(`${PAYMENT_SERVICE_URL}/admin/total-revenue`, (data) =>
+      setTotalRevenue(data.totalRevenue)
+    );
+  };
+
+  const fetchPaymentInfo = () => {
+    fetchData(
+      `${PAYMENT_SERVICE_URL}/admin/revenue?interval=${
+        paymentInterval || "yearly"
+      }`,
+      (data) => setRevenueData(data)
+    );
   };
   useEffect(() => {
     fetchUserCount();
     fetchUserAuditLogs();
     fetchPaymentInfo();
     fetchProblemCount();
+    fetchTotalRevenue();
+    fetchActiveSubscriptions();
   }, []);
   const handleTabChange = (tab: string) => {
     setPaymentInterval(tab);
@@ -240,17 +241,22 @@ function AdminDashboard() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className="flex flex-col gap-10 text-white font-bold">
-          <div className="bg-dark-300 p-5 rounded-lg">
+        <div className="flex flex-col gap-10 text-white justify-center font-bold">
+          <div className="bg-dark-300 p-5 rounded-lg flex justify-center">
             No of Users : {" " + userCount}
           </div>
           <div className="bg-dark-300 p-5 rounded-lg flex justify-center">
             Vists : {" " + userAuditLogs.length}
           </div>
-          <div className="bg-dark-300 p-5 rounded-lg">
+          <div className="bg-dark-300 p-5 rounded-lg flex justify-center">
             Problem Count : {problemCount}
           </div>
-          <div className="bg-dark-300 p-5 rounded-lg"></div>
+          <div className="bg-dark-300 p-5 rounded-lg flex justify-center">
+            Total Revenue : {totalRevenue} Rs
+          </div>
+          <div className="bg-dark-300 p-5 rounded-lg flex justify-center">
+            Active Subscriptions : {activeSubscriptions}
+          </div>
         </div>
       </div>
     </div>

@@ -67,14 +67,14 @@ function ProblemDetailWindow({ problemInfo, submissionResponse }: Props) {
             >
               Discussions
             </button>
-            <button
+            {/* <button
               className={`${
                 window == 4 ? " text-primary" : "hover:text-primary "
               } transition-all`}
               onClick={() => changeWindow(4)}
             >
               Solutions
-            </button>
+            </button> */}
           </div>
         </div>
         <hr />

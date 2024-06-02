@@ -1,16 +1,14 @@
-import userSlice, { logout } from "@/redux/reducers/userSlice";
-import { store } from "@/redux/store/store";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { getCookie, removeCookie } from "typescript-cookie";
+import { getCookie } from "typescript-cookie";
 
 const instance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://www.needus.store",
   withCredentials: true,
 });
 
 instance.interceptors.request.use((config) => {
-  const token = getCookie("userToken");
+  const token = localStorage.getItem("userToken") as string;
+  console.log("ENCODED TOKEN : {}", token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
     console.log(config);

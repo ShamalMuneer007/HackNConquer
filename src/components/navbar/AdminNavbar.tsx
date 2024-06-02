@@ -70,17 +70,7 @@ function AdminNavbar() {
           >
             Categories
           </NavLink>
-          <NavLink
-            to="/admin/leaderboard"
-            end
-            className={({ isActive }) =>
-              `transition-all ${
-                isActive ? activeNavLinkStyle : notActiveLinkstyle
-              }`
-            }
-          >
-            Leaderboards
-          </NavLink>
+
           <NavLink
             to="/admin/clans"
             end

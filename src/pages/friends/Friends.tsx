@@ -192,6 +192,7 @@ function Friends() {
                   <img
                     className="rounded-full w-16"
                     src={friend.profileImage || defaultProfileImg}
+                    referrerPolicy="no-referrer"
                   />
                   <p>{friend.username}</p>
                 </div>

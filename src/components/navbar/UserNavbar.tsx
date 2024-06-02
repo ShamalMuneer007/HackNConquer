@@ -226,6 +226,7 @@ function UserNavbar() {
                 <img
                   src={user.profileImage ? user.profileImage : profileIcon}
                   className="rounded-full"
+                  referrerPolicy="no-referrer"
                   width={"35px"}
                   height={"35px"}
                 />

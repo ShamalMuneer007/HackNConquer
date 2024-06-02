@@ -11,4 +11,5 @@ export default interface IUserData {
   currentMaxXp: number;
   clanId: number | null;
   friends: IUserData[];
+  blocked: boolean;
 }

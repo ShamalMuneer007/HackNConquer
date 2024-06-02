@@ -273,9 +273,7 @@ function AdminProblems() {
       <div className="page-padding">
         <h1 className="text-white font-bold text-4xl">Problems</h1>
         {!loader &&
-          (problems.length !== 0
-            ? renderProblemsList()
-            : !problems && renderEmptyState())}
+          (problems.length !== 0 ? renderProblemsList() : renderEmptyState())}
       </div>
     </>
   );

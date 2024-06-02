@@ -65,12 +65,12 @@ const Notifications = () => {
             body: payload.notification.body || "",
           });
 
-          toast.info(
-            `${payload.notification.title} \n, ${payload.notification.body}`,
-            {
-              position: "top-right",
-            }
-          );
+          // toast.info(
+          //   `${payload.notification.title} \n, ${payload.notification.body}`,
+          //   {
+          //     position: "top-right",
+          //   }
+          // );
         }
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -99,7 +99,7 @@ function Login() {
                       console.log("Login Failed");
                     }}
                     useOneTap
-                    shape="circle"
+                    shape="pill"
                   />
                 </div>
                 <div className="text-white text-md pt-5 lg:hidden relative flex  justify-center">
