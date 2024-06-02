@@ -9,6 +9,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    target: "esnext",
+  },
+  esbuild: {
+    target: "es2022", // or 'esnext' for the latest features
+  },
   define: {
     global: "globalThis",
   },
