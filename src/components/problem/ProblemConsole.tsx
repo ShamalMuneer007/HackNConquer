@@ -18,19 +18,19 @@ function ProblemConsole({ result }: any) {
             <tr>
               <td>
                 {`${
-                  acceptedCase.split("\n")[0].input.includes(" ") ? "[ " : ""
+                  acceptedCase.input.split("\n")[0].includes(" ") ? "[ " : ""
                 }` +
-                  acceptedCase.split("\n")[0].input.replaceAll(" ", ", ") +
+                  acceptedCase.input.split("\n")[0].replaceAll(" ", ", ") +
                   `${
-                    acceptedCase.split("\n")[0].input.includes(" ") ? " ]" : ""
+                    acceptedCase.input.split("\n")[0].includes(" ") ? " ]" : ""
                   }`}
-                {acceptedCase.split("\n")[1] &&
+                {acceptedCase.input.split("\n")[1] &&
                   `${
-                    acceptedCase.split("\n")[1].input.includes(" ") ? "[ " : ""
+                    acceptedCase.input.split("\n")[1].includes(" ") ? "[ " : ""
                   }` +
-                    acceptedCase.split("\n")[1].input.replaceAll(" ", ", ") +
+                    acceptedCase.input.split("\n")[1].replaceAll(" ", ", ") +
                     `${
-                      acceptedCase.split("\n")[1].input.includes(" ")
+                      acceptedCase.input.split("\n")[1].includes(" ")
                         ? " ]"
                         : ""
                     }`}
