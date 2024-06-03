@@ -25,7 +25,7 @@ function ProblemConsole({ result }: any) {
                     acceptedCase.input.split("\n")[0].includes(" ") ? " ]" : ""
                   }`}
                 {acceptedCase.input.split("\n")[1] &&
-                  `${
+                  `, ${
                     acceptedCase.input.split("\n")[1].includes(" ") ? "[ " : ""
                   }` +
                     acceptedCase.input.split("\n")[1].replaceAll(" ", ", ") +
