@@ -151,7 +151,7 @@ function SubmissionResponseWindow({
                       onClick={(e) => toggleDropdown(e)}
                     >
                       <span>
-                        Accepted Cases (
+                        Rejected Cases (
                         {submissionResponse?.rejectedCases.length})
                       </span>
                       <svg

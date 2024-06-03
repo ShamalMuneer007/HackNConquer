@@ -6,7 +6,7 @@ import {
 } from "../../../redux/actions/userActions";
 import Particle from "../../../components/particle/Particle";
 import Logo from "../../../components/Logo/Logo";
-import { Formik, Form } from "formik";
+import { Formik, Form, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import BasicFormikInput from "../../../components/input/BasicFormikInput";
@@ -63,7 +63,12 @@ function Signup() {
       .required("Retype your password!"),
   });
   const dispatch: TypeDispatch = useDispatch();
-  const handleRegisterSubmit = async (userCredentials: IUserInformation) => {
+  const handleRegisterSubmit = async (
+    userCredentials: IUserInformation,
+    formikHelpers: FormikHelpers<IUserInformation>,
+    event: React.FormEvent<HTMLFormElement> | undefined
+  ) => {
+    event?.preventDefault();
     await dispatch(userRegister(userCredentials));
     setUserData(userCredentials);
   };
