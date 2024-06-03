@@ -48,7 +48,11 @@ export default function TestCases({ testCases, setTestCases }: Props) {
                     className="bg-dark-100 w-96 text-white p-2"
                     value={testCase.testCaseInput}
                     onChange={(e) =>
-                      handleInputChange(index, "testCaseInput", e.target.value)
+                      handleInputChange(
+                        index,
+                        "testCaseInput",
+                        e.target.value.replace(/\\n/g, "\n")
+                      )
                     }
                   />
                 </td>
