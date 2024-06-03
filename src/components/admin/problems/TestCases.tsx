@@ -42,23 +42,17 @@ export default function TestCases({ testCases, setTestCases }: Props) {
               <tr key={testCase.idx}>
                 <td className="relative">
                   <span className="absolute -left-7">{index + 1}</span>
-                  <input
-                    type="text"
+                  <textarea
                     disabled={testCases.length - 1 !== index}
                     className="bg-dark-100 w-96 text-white p-2"
                     value={testCase.testCaseInput}
                     onChange={(e) =>
-                      handleInputChange(
-                        index,
-                        "testCaseInput",
-                        e.target.value.replace(/\\n/g, "\n")
-                      )
+                      handleInputChange(index, "testCaseInput", e.target.value)
                     }
                   />
                 </td>
                 <td>
-                  <input
-                    type="text"
+                  <textarea
                     disabled={testCases.length - 1 !== index}
                     value={testCase.expectedOutput}
                     className="bg-dark-100 w-96 text-white p-2"
