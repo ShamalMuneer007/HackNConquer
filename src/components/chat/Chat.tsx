@@ -85,6 +85,11 @@ function Chat() {
         <div className="px-6 pt-2">
           <h2 className="font-bold text-xl"> Messages</h2>
           <div className="mt-5 overflow-y-scroll">
+            {friends.length === 0 && (
+              <div className="text-center text-white text-lg font-bold">
+                Make some friends to chat!
+              </div>
+            )}
             {friends.map((friend, index) => (
               <div key={friend.userId}>
                 <div

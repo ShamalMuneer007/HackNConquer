@@ -47,6 +47,11 @@ function UserSubscriptionInfo() {
     <>
       <div className="page-padding text-white">
         <h2 className="font-bold text-3xl p-2">Subscriptions</h2>
+        {userSubscriptions.length == 0 && (
+          <div className="text-center mt-2 font-bold text-xl">
+            No subscriptions are done.
+          </div>
+        )}
         {userSubscriptions?.length > 0 && (
           <table className="w-full rounded-lg mt-10">
             <thead>

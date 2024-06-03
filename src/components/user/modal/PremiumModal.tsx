@@ -13,6 +13,7 @@ interface Props {
 }
 function PremiumModal({ setModal }: Props) {
   const { user } = useSelector((state: RootState) => state.user);
+  const [loading, setLoading] = useState(false);
   const createSubscription = async () => {
     try {
       const createPaymentIntentData = {
@@ -26,13 +27,14 @@ function PremiumModal({ setModal }: Props) {
         createPaymentIntentData
       );
       console.log("Response: ", response);
-
+      setLoading(false);
       if (response.data.redirectUrl) {
         window.location.href = response.data.redirectUrl;
       }
       setModal(false);
     } catch (error: any) {
       if (error.response && error.response.data) {
+        setLoading(false);
         if (error.response.status === 401) {
           toast.error("Token expired");
         } else if (
@@ -51,6 +53,7 @@ function PremiumModal({ setModal }: Props) {
     }
   };
   const subscribeClickHandler = () => {
+    setLoading(true);
     createSubscription();
   };
   return (
@@ -74,7 +77,13 @@ function PremiumModal({ setModal }: Props) {
                   onClick={subscribeClickHandler}
                   className="bg-yellow-800 mt-10 hover:bg-yellow-900 transition-colors text-white font-bold rounded-md p-2"
                 >
-                  Subscribe
+                  {!loading ? (
+                    <>Subscribe</>
+                  ) : (
+                    <div className="flex justify-center">
+                      <p className="animate-spin text-center w-6 h-6 border-2 border-white rounded-full border-t-transparent"></p>
+                    </div>
+                  )}
                 </button>
               </div>
             </div>

@@ -205,7 +205,7 @@ function SubmissionResponseWindow({
                                   <span className="font-semibold">
                                     Expected Output :{" "}
                                   </span>{" "}
-                                  {rejectedCase.output}
+                                  {rejectedCase.expectedOutput}
                                 </div>
                               </div>
                             </div>
