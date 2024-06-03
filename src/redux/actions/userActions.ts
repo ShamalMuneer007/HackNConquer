@@ -138,7 +138,7 @@ export const userRegister = createAsyncThunk(
         return rejectWithValue(response.data.error);
       }
       if (response.data.accessToken) {
-        console.log("LOGIN RESPONSE : ", response.data.accessToken);
+        console.log("REGISTER RESPONSE : ", response.data.accessToken);
         localStorage.setItem("userToken", response.data.accessToken);
         const userInfoResponse = await instance.get(
           `${USER_SERVICE_URL}/user/fetch-userdata`

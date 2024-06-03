@@ -62,7 +62,7 @@ function App() {
   };
   return (
     <>
-      <WithAuthProvider>
+      <ChatProvider user={user}>
         <Notifications />
         <ToastContainer theme="dark" />
         <Routes>
@@ -181,7 +181,7 @@ function App() {
             <Route path="*" element={<NotFound />}></Route>
           </Route>
         </Routes>
-      </WithAuthProvider>
+      </ChatProvider>
     </>
   );
 }

@@ -14,7 +14,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { Typewriter } from "react-simple-typewriter";
 import IUserInformation from "../../../interfaces/IUserInformation";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import OtpModal from "../../../components/modals/OtpModal";
 import { setMessage } from "../../../redux/reducers/userSlice";
 
@@ -66,7 +66,7 @@ function Signup() {
   const handleRegisterSubmit = async (
     userCredentials: IUserInformation,
     formikHelpers: FormikHelpers<IUserInformation>,
-    event: React.FormEvent<HTMLFormElement> | undefined
+    event?: FormEvent<HTMLFormElement>
   ) => {
     event?.preventDefault();
     await dispatch(userRegister(userCredentials));
