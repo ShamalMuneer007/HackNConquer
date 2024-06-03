@@ -25,7 +25,7 @@ function ProblemConsole({ result }: any) {
                     acceptedCase.input.split("\n")[0].includes(" ") ? " ]" : ""
                   }`}
                 {acceptedCase.input.split("\n")[1] &&
-                  `, ${
+                  ` , ${
                     acceptedCase.input.split("\n")[1].includes(" ") ? "[ " : ""
                   }` +
                     acceptedCase.input.split("\n")[1].replaceAll(" ", ", ") +
@@ -36,6 +36,7 @@ function ProblemConsole({ result }: any) {
                     }`}
               </td>
               <td>
+                {`${acceptedCase.trim(" ").length == 0 && "null"}`}
                 {`${acceptedCase.output.includes(" ") ? "[ " : ""}` +
                   acceptedCase.output.replaceAll(" ", ", ") +
                   `${acceptedCase.output.includes(" ") ? " ]" : ""}`}
