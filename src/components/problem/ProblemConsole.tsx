@@ -17,9 +17,23 @@ function ProblemConsole({ result }: any) {
           <tbody className="text-center">
             <tr>
               <td>
-                {`${acceptedCase.input.includes(" ") ? "[ " : ""}` +
-                  acceptedCase.input.replaceAll(" ", ", ") +
-                  `${acceptedCase.input.includes(" ") ? " ]" : ""}`}
+                {`${
+                  acceptedCase.split("\n")[0].input.includes(" ") ? "[ " : ""
+                }` +
+                  acceptedCase.split("\n")[0].input.replaceAll(" ", ", ") +
+                  `${
+                    acceptedCase.split("\n")[0].input.includes(" ") ? " ]" : ""
+                  }`}
+                {acceptedCase.split("\n")[1] &&
+                  `${
+                    acceptedCase.split("\n")[1].input.includes(" ") ? "[ " : ""
+                  }` +
+                    acceptedCase.split("\n")[1].input.replaceAll(" ", ", ") +
+                    `${
+                      acceptedCase.split("\n")[1].input.includes(" ")
+                        ? " ]"
+                        : ""
+                    }`}
               </td>
               <td>
                 {`${acceptedCase.output.includes(" ") ? "[ " : ""}` +
