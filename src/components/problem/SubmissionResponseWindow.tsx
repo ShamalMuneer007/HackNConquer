@@ -112,7 +112,7 @@ function SubmissionResponseWindow({
                               <div className="flex flex-col gap-2">
                                 <div>
                                   <span className="font-semibold">Input:</span>{" "}
-                                  {acceptedCase.input}
+                                  {acceptedCase.input.split("\n")[0]}
                                 </div>
                                 <div>
                                   <span className="font-semibold">Output:</span>{" "}
