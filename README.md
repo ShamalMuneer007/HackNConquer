@@ -33,6 +33,6 @@ HackNConquer is a dynamic competitive programming platform where users can solve
 - Node.js (v14 or later)
 - npm (v6 or later)
 ### Installation
-1. Clone the repository: git clone https://github.com/ShamalMuneer007/HackNConquer-Client
-2. Navigate to the project directory: cd <project-directory>
+1. Clone the repository: `git clone https://github.com/ShamalMuneer007/HackNConquer-Client`
+2. Navigate to the project directory: `cd ./<project-directory>`
 3. Start vite server `npm run dev`
