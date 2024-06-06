@@ -113,6 +113,8 @@ function SubmissionResponseWindow({
                                 <div>
                                   <span className="font-semibold">Input:</span>{" "}
                                   {acceptedCase.input.split("\n")[0]}
+                                  {acceptedCase.input.split("\n")[1] &&
+                                    `,  ${acceptedCase.input.split("\n")[1]}`}
                                 </div>
                                 <div>
                                   <span className="font-semibold">Output:</span>{" "}
@@ -193,7 +195,9 @@ function SubmissionResponseWindow({
                                   <span className="font-semibold">
                                     Input :{" "}
                                   </span>{" "}
-                                  {rejectedCase.input}
+                                  {rejectedCase.input.split("\n")[0]}
+                                  {rejectedCase.input.split("\n")[1] &&
+                                    `,  ${rejectedCase.input.split("\n")[1]}`}
                                 </div>
                                 <div>
                                   <span className="font-semibold">
