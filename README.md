@@ -13,8 +13,7 @@ HackNConquer is a dynamic competitive programming platform where users can solve
 - User authentication and authorization using Firebase
 - Real-time problem-solving and leaderboards
 - Interactive and dynamic user interface built with React
-- State management using Redux
-- Responsive design for various device sizes
+- Global state management using Redux
 - Integration with backend microservices
 
 ## Technologies Used
