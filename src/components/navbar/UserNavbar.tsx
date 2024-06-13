@@ -7,8 +7,12 @@ import UserProfile from "../user/modal/UserProfile";
 import {
   FaBell,
   FaChevronUp,
+  FaCode,
+  FaList,
   FaMagnifyingGlass,
   FaMessage,
+  FaTrophy,
+  FaUsers,
 } from "react-icons/fa6";
 import { useDebounce } from "@/hooks/useDebounce";
 import instance from "@/config/axiosConfig";
@@ -18,7 +22,12 @@ import { toast } from "react-toastify";
 import SearchOutput from "./SearchOutput";
 import Chat from "../chat/Chat";
 import { IoMdClose } from "react-icons/io";
-import { FaChevronCircleUp } from "react-icons/fa";
+import {
+  FaChevronCircleUp,
+  FaHome,
+  FaTasks,
+  FaUserFriends,
+} from "react-icons/fa";
 function UserNavbar() {
   const activeNavLinkStyle =
     "text-primary underline bg-gray-800/20 rounded p-3  underline-offset-8";
@@ -27,6 +36,8 @@ function UserNavbar() {
   const [showModal, setShowModal] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const [searchModal, setSearchModal] = useState(false);
+
   const [searchResultData, setSearchResultData] = useState<IUserData[] | null>(
     null
   );
@@ -73,7 +84,7 @@ function UserNavbar() {
       )}
       {showSidebar && (
         <div className="flex w-screen h-screen backdrop-blur-sm lg:hidden z-50 items-start justify-center  bg-black/30 left-0 fixed top-0">
-          <div className="w-screen h-[50%] bg-dark-100/90 rounded-b-3xl border-b-2 border-b-primary">
+          <div className="w-screen pb-7 bg-dark-100/90 rounded-b-3xl border-b-2 border-b-primary">
             <div className="mx-5 mt-0.5 flex justify-between items-center">
               {" "}
               <Link to={"/"} className="">
@@ -86,6 +97,143 @@ function UserNavbar() {
                 <FaChevronUp />
               </button>
             </div>
+            <div className="flex flex-col px-3">
+              <NavLink
+                onClick={() => setShowSidebar(false)}
+                to="/"
+                end
+                className={({ isActive }) =>
+                  `transition-color duration-300 flex items-center hover:bg-gray-800/20  ${
+                    isActive ? activeNavLinkStyle : notActiveLinkstyle
+                  }`
+                }
+              >
+                <FaHome className="mr-2" />
+                Home
+              </NavLink>
+              <NavLink
+                to="/problems"
+                end
+                onClick={() => setShowSidebar(false)}
+                className={({ isActive }) =>
+                  `transition-color duration-300 flex items-center hover:bg-gray-800/20 ${
+                    isActive || window.location.pathname.startsWith("/problems")
+                      ? activeNavLinkStyle
+                      : notActiveLinkstyle
+                  }`
+                }
+              >
+                <FaCode className="mr-2" />
+                Problems
+              </NavLink>
+              <NavLink
+                to="/categories"
+                end
+                onClick={() => setShowSidebar(false)}
+                className={({ isActive }) =>
+                  `transition-color duration-300 flex items-center hover:bg-gray-800/20  ${
+                    isActive ||
+                    window.location.pathname.startsWith("/categories")
+                      ? activeNavLinkStyle
+                      : notActiveLinkstyle
+                  }`
+                }
+              >
+                <FaList className="mr-2" />
+                Categories
+              </NavLink>
+              <NavLink
+                to="/leaderboard"
+                end
+                onClick={() => setShowSidebar(false)}
+                className={({ isActive }) =>
+                  `transition-color duration-300 flex items-center hover:bg-gray-800/20 ${
+                    isActive ? activeNavLinkStyle : notActiveLinkstyle
+                  }`
+                }
+              >
+                <FaTrophy className="mr-2" />
+                Leaderboards
+              </NavLink>
+              <NavLink
+                to="/friends"
+                end
+                onClick={() => setShowSidebar(false)}
+                className={({ isActive }) =>
+                  `transition-color duration-300 flex items-center hover:bg-gray-800/20  ${
+                    isActive || window.location.pathname.startsWith("/friends")
+                      ? activeNavLinkStyle
+                      : notActiveLinkstyle
+                  }`
+                }
+              >
+                <FaUserFriends className="mr-2" />
+                Friends
+              </NavLink>
+              <NavLink
+                to="/clan"
+                end
+                onClick={() => setShowSidebar(false)}
+                className={({ isActive }) =>
+                  `transition-color duration-300 flex items-center hover:bg-gray-800/20  ${
+                    isActive ? activeNavLinkStyle : notActiveLinkstyle
+                  }`
+                }
+              >
+                <FaUsers className="mr-2" />
+                Clan
+              </NavLink>
+              <NavLink
+                to="/notifications"
+                end
+                onClick={() => setShowSidebar(false)}
+                className={({ isActive }) =>
+                  `transition-color duration-300 flex items-center hover:bg-gray-800/20  ${
+                    isActive ? activeNavLinkStyle : notActiveLinkstyle
+                  }`
+                }
+              >
+                <FaBell className="mr-2" />
+                Notifications
+              </NavLink>
+              {user ? (
+                <div className="flex items-center justify-center mt-2">
+                  <img
+                    src={user.profileImage ? user.profileImage : profileIcon}
+                    className="rounded-full mr-2"
+                    referrerPolicy="no-referrer"
+                    width={"30px"}
+                    height={"30px"}
+                  />
+                  <button
+                    onClick={() => {
+                      setShowModal(true);
+                      setModalInfo(user);
+                    }}
+                    className="text-white hover:text-red-500 transition-colors flex items-center gap-3"
+                  >
+                    {user.username}
+                    {/* Logout */}
+                  </button>
+                </div>
+              ) : (
+                <div className="flex justify-end items-center me-5 w-full text-white gap-4">
+                  <Link
+                    className="hover:text-primary transition-colors"
+                    to={"/login"}
+                  >
+                    Login
+                  </Link>
+                  <div className="text-xs text-gray-700">OR</div>
+                  <Link
+                    className="hover:text-primary transition-colors"
+                    to={"/signup"}
+                  >
+                    Signup
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -97,22 +245,27 @@ function UserNavbar() {
           </Link>
         </div>
         <div className="w-full flex justify-end">
-          <div
-            className="text-white active:text-primary"
-            onClick={() => setShowSidebar(true)}
-          >
-            {" "}
-            <svg
-              className="h-6 w-6 fill-current"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+          <div className="flex gap-6">
+            <button className="text-white">
+              <FaMagnifyingGlass />
+            </button>
+            <div
+              className="text-white active:text-primary"
+              onClick={() => setShowSidebar(true)}
             >
-              <path
-                fillRule="evenodd"
-                d="M3 6a1 1 0 011-1h16a1 1 0 110 2H4a1 1 0 01-1-1zm0 6a1 1 0 011-1h16a1 1 0 110 2H4a1 1 0 01-1-1zm1 5a1 1 0 100 2h16a1 1 0 100-2H4z"
-                clipRule="evenodd"
-              />
-            </svg>
+              {" "}
+              <svg
+                className="h-6 w-6 fill-current"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3 6a1 1 0 011-1h16a1 1 0 110 2H4a1 1 0 01-1-1zm0 6a1 1 0 011-1h16a1 1 0 110 2H4a1 1 0 01-1-1zm1 5a1 1 0 100 2h16a1 1 0 100-2H4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>

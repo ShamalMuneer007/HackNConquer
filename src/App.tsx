@@ -85,9 +85,9 @@ function App() {
               !user ? (
                 <Signup />
               ) : user.role === "ROLE_ADMIN" ? (
-                <Navigate to="/admin/dashboard" />
+                <Navigate to="/admin" />
               ) : (
-                <Navigate to="/user/dashboard" />
+                <Navigate to="/" />
               )
             }
           ></Route>

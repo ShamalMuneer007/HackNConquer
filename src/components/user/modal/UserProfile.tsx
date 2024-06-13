@@ -158,7 +158,7 @@ function UserProfile({ setShowModal, userInfo }: Props) {
   };
   return (
     <div className="absolute inset-0 z-[60] bg-black/30 text-white flex justify-center backdrop-blur-md items-center h-screen w-screen">
-      <div className="w-[40%] py-5 flex flex-col justify-center bg-dark-300 rounded-lg">
+      <div className="md:w-[40%] w-[100vh] py-5 flex flex-col justify-center bg-dark-200 rounded-lg">
         <div className="w-full flex justify-end px-5">
           <button
             onClick={() => {
@@ -181,7 +181,7 @@ function UserProfile({ setShowModal, userInfo }: Props) {
               referrerPolicy="no-referrer"
             />
             {user?.userId === userInfo.userId && (
-              <div className="bg-dark-300 rounded-full absolute right-0 p-2  hover:text-primary cursor-pointer bottom-0 ">
+              <div className="bg-dark-200 rounded-full absolute right-0 p-2  hover:text-primary cursor-pointer bottom-0 ">
                 <FaPencil />
               </div>
             )}
