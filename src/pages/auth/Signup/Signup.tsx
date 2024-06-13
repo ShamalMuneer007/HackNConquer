@@ -74,7 +74,7 @@ function Signup() {
   };
   return (
     <>
-      <div className="h-[98.9vh] md:px-24 px-2">
+      <div className="h-[98.9vh]">
         <Particle />
         {otpModal && (
           <OtpModal
@@ -83,13 +83,14 @@ function Signup() {
             setOtpModal={setOtpModal}
           />
         )}
-        <div className="text-white lg:block hidden font-bold absolute pt-7 md:left-[5%] left-[10%] md:text-3xl text-4xl">
-          <Link to={"/"}>
-            <Logo className="w-[30%]" />
-          </Link>
-        </div>
-        <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 mt-14 bg-opacity-15 bg-blue-gray-800 rounded-xl py-12 lg:w-[40%] w-[70%]">
+        <Link
+          to={"/"}
+          className="w-full relative flex my-2 mb-2  justify-center"
+        >
+          <Logo className="md:w-[13%] w-[50%]" />
+        </Link>
+        <div className="flex h-full  md:px-24 lg:justify-start justify-center gap-32">
+          <div className="backdrop-blur-sm md:ms-20 bg-opacity-15 xs:h-[90%] xs:pb-2 sm:h-[85%] bg-blue-gray-800 rounded-xl py-16 lg:w-[40%] w-[90%]">
             <div className="flex flex-col">
               <div className="lg:ps-20 mb-12 ">
                 <h2 className="text-white font-bold text-4xl text-center lg:text-left">

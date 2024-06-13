@@ -190,7 +190,12 @@ export const ChatProvider: React.FC<{
     if (stompClient && stompClient.connected) {
       console.log("Reading messages of : ", senderId, " by : ", receiverId);
       stompClient.send(`/app/message/${receiverId}/read/${senderId}`, {});
-
+      // setMessages((existing) =>
+      //   existing.map((message) => {
+      //     message.read = true;
+      //     return message;
+      //   })
+      // );
       setNewMessages((prevNewMessages) => {
         const existingUserIndex = prevNewMessages.findIndex(
           (newMessage) => newMessage.userId === senderId

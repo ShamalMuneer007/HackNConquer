@@ -11,13 +11,13 @@ function UserSolvedSubmissions({ userSolvedSubmissions }: Props) {
   return (
     <>
       {userSolvedSubmissions.length > 0 ? (
-        <div className="w-full bg-dark-300 px-5 py-4 mt-6 text-white rounded-lg">
+        <div className="w-full mt-60 md:bg-dark-300 md:px-5 py-4 md:mt-6 text-white rounded-lg">
           <div>
-            <h3 className="font-bold text-2xl">Solved Problems</h3>
+            <h3 className="font-bold text-xl md:text-2xl">Solved Problems</h3>
             <hr className="my-3" />
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-10">
+            <div className="overflow-x-auto shadow-md rounded-lg  md:mt-10">
               <table className="w-full text-sm text-left rtl:text-right  dark:text-dark-600">
-                <thead className="text-xs text-dark-700 uppercase bg-dark-50 dark:bg-dark-100 ">
+                <thead className="text-xs text-dark-700 uppercase bg-dark-50 md:dark:bg-dark-100 dark:bg-dark-300 ">
                   <tr>
                     <th scope="col" className="px-6 py-3">
                       Problem Number

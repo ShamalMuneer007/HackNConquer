@@ -4,7 +4,12 @@ import { useSelector } from "react-redux";
 import profileIcon from "/profile-icon.png";
 import { useEffect, useState } from "react";
 import UserProfile from "../user/modal/UserProfile";
-import { FaBell, FaMagnifyingGlass, FaMessage } from "react-icons/fa6";
+import {
+  FaBell,
+  FaChevronUp,
+  FaMagnifyingGlass,
+  FaMessage,
+} from "react-icons/fa6";
 import { useDebounce } from "@/hooks/useDebounce";
 import instance from "@/config/axiosConfig";
 import { USER_SERVICE_URL } from "@/constants/service_urls";
@@ -12,8 +17,8 @@ import IUserData from "@/interfaces/IUserData";
 import { toast } from "react-toastify";
 import SearchOutput from "./SearchOutput";
 import Chat from "../chat/Chat";
-import { FaRegWindowClose, FaWindowClose } from "react-icons/fa";
-import { IoMdClose, IoMdCloseCircle } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
+import { FaChevronCircleUp } from "react-icons/fa";
 function UserNavbar() {
   const activeNavLinkStyle =
     "text-primary underline bg-gray-800/20 rounded p-3  underline-offset-8";
@@ -67,16 +72,29 @@ function UserNavbar() {
         <UserProfile userInfo={modalInfo} setShowModal={setShowModal} />
       )}
       {showSidebar && (
-        <div className="flex w-screen h-screen backdrop-blur-md lg:hidden z-50 items-start justify-center  bg-black/30 left-0 fixed top-0">
-          <div className="w-screen h-[50%] bg-dark-100 rounded-b-3xl border-b-2 border-b-primary">
-            <div className=""></div>
+        <div className="flex w-screen h-screen backdrop-blur-sm lg:hidden z-50 items-start justify-center  bg-black/30 left-0 fixed top-0">
+          <div className="w-screen h-[50%] bg-dark-100/90 rounded-b-3xl border-b-2 border-b-primary">
+            <div className="mx-5 mt-0.5 flex justify-between items-center">
+              {" "}
+              <Link to={"/"} className="">
+                <Logo className="w-36" />
+              </Link>
+              <button
+                onClick={() => setShowSidebar(false)}
+                className="active:text-primary"
+              >
+                <FaChevronUp />
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       <div className="flex w-screen backdrop-blur-md lg:hidden z-20 items-center py-3 px-5 bg-gray-900/50 left-0 h-16 fixed top-0">
         <div className="text-white flex items-center text-2xl font-bold">
-          <Link to={"/"}>classname</Link>
+          <Link to={"/"} className="w-36">
+            <Logo />
+          </Link>
         </div>
         <div className="w-full flex justify-end">
           <div
@@ -254,13 +272,17 @@ function UserNavbar() {
       {user && (
         <button
           onClick={() => setMessageModal((modal) => !modal)}
-          className="fixed bottom-6 border border-white rounded-full z-40 bg-dark-300 p-4 text-center flex items-center justify-center right-10 text-white"
+          className={`fixed ${
+            messageModal
+              ? "top-6 md:top-auto md:bottom-7 md:border md:border-white"
+              : "bottom-7 border border-white"
+          }  rounded-full z-40 bg-dark-300 p-4 text-center flex items-center justify-center right-10 text-white`}
         >
           {!messageModal ? <FaMessage /> : <IoMdClose />}
         </button>
       )}
       {user && messageModal && (
-        <div className="fixed bottom-10 right-24 z-30">
+        <div className="fixed md:bottom-10 md:right-24 z-30">
           {" "}
           <Chat />{" "}
         </div>

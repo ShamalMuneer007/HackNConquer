@@ -47,20 +47,23 @@ function Login() {
   const dispatch: TypeDispatch = useDispatch();
   return (
     <>
-      <div className="h-[98.9vh] md:px-24 px-2">
+      <div className="h-[98.9vh] overflow-hidden">
         <Particle />
-        <div className="text-white lg:block hidden font-bold absolute pt-7 md:left-[5%] left-[10%] md:text-3xl text-4xl">
-          <Logo className="w-[30%]" />
-        </div>
-        <div className="flex h-full items-center lg:justify-start justify-center gap-32">
-          <div className="backdrop-blur-sm ms-20 bg-opacity-15 bg-blue-gray-800 rounded-xl py-16 lg:w-[40%] w-[70%]">
-            <div className="flex flex-col">
+        <Link
+          to={"/"}
+          className="w-full relative flex my-2 mb-2  justify-center"
+        >
+          <Logo className="md:w-[13%] w-[50%]" />
+        </Link>
+        <div className="flex h-full  md:px-24 lg:justify-start justify-center gap-32">
+          <div className="backdrop-blur-sm md:ms-20 bg-opacity-15 bg-blue-gray-800 mb-[20vh] rounded-xl py-16 lg:w-[40%] w-[90%]">
+            <div className="flex flex-col justify-center">
               <div className="lg:ps-20 mb-12 ">
-                <h2 className="text-white font-bold text-4xl text-center lg:text-left">
+                <h2 className="text-white font-bold md:text-4xl text-3xl text-center lg:text-left">
                   Sign in
                 </h2>
               </div>
-              <div className="items-center h-full mt-10">
+              <div className="flex flex-col justify-center h-full md:mt-10">
                 <Formik
                   initialValues={initialValues}
                   onSubmit={handleLoginSubmit}

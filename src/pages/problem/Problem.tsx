@@ -143,10 +143,12 @@ function Problem() {
                   submissionResponse={submissionResponse}
                 />
               </ResizablePanel>
+
               <ResizableHandle
                 withHandle
                 className="hover:bg-green-700/50 text-white active:bg-green-700/50 flex justify-center items-center w-[0.3rem] h-full"
               />
+              {/* <div className="md:flex hidden"> */}
               <ResizablePanel>
                 <ResizablePanelGroup direction="vertical" className="h-100vh">
                   <ResizablePanel defaultSize={50}>
@@ -168,6 +170,7 @@ function Problem() {
                   </ResizablePanel>
                 </ResizablePanelGroup>
               </ResizablePanel>
+              {/* </div> */}
             </ResizablePanelGroup>
           </div>
         )}

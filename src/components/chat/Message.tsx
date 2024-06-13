@@ -1,10 +1,9 @@
 import IUserData from "@/interfaces/IUserData";
 import { Dispatch, SetStateAction, useEffect, useState, useRef } from "react";
-import { BsBack } from "react-icons/bs";
+
 import profileImage from "/profile-icon.png";
 import {
   IoMdArrowRoundBack,
-  IoMdCloseCircle,
   IoMdCloseCircleOutline,
   IoMdSend,
 } from "react-icons/io";
@@ -15,7 +14,6 @@ import { toast } from "react-toastify";
 import instance from "@/config/axiosConfig";
 import { useChatContext, IChatData } from "@/contexts/useChatContext";
 import { FaReply } from "react-icons/fa6";
-import { REPL_MODE_SLOPPY } from "repl";
 
 interface Props {
   selectedUser: IUserData;
@@ -231,6 +229,7 @@ function Message({ selectedUser, setSelectedUser }: Props) {
                     : null,
               };
               console.log("Payload : ", payload);
+              setReplyTo(null);
               sendMessage(payload);
               setMessage("");
             }

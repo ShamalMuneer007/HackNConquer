@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .page-padding {
-  @apply px-24 py-24;
+  @apply md:px-24 md:py-24 px-[7%] py-[24%];
 }
 ::-webkit-scrollbar {
   width: 3px;

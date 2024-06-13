@@ -41,7 +41,6 @@ function UserHome() {
   return (
     <div className="page-padding dark:text-white h-[98.9vh]">
       <div className="w-full flex mb-10 items-center">
-        <div className=""></div>
         {!user && (
           <div className="skeleton-loader h-20">
             <div className="skeleton-item"></div>
@@ -50,11 +49,10 @@ function UserHome() {
           </div>
         )}
         {/* User Level Progress */}
-
         <div className="px-7 w-full">
-          <div className="mt-10 w-full rounded flex justify-around h-40 items-center ">
+          <div className="mt-10 rounded flex md:flex-row mb-10 flex-col justify-evenly h-40 items-center ">
             {user && (
-              <div className="flex flex-col gap-5 w-full justify-center items-center text-white rounded-xl p-5">
+              <div className="flex flex-col gap-5 md:w-[50%] justify-center mb-10 items-center text-white rounded-xl">
                 <div className="w-28 relative flex items-center justify-center">
                   <Circle
                     percent={(user.xp / user.currentMaxXp) * 100}
@@ -76,29 +74,38 @@ function UserHome() {
                   <div className="font-bold">Level : {user.level}</div>
                 </div>
                 <div className="text-xs text-gray-500">
-                  Solve more problems to gain xp level up
+                  Solve more problems to gain xp and level up
                 </div>
               </div>
             )}
-            <div className="justify-center text-center h-full  w-full p-10 flex items-center">
-              <div className="font-bold">Global Rank : #{user?.playerRank}</div>
-            </div>
-            <div className="justify-center text-center h-full  w-full p-10 flex items-center">
-              <div className="font-bold">
-                Friends Rank : #{user?.playerRank}
+            <div className="flex flex-col md:flex-row gap-10 w-full md:gap-0 justify-between">
+              <div className="justify-center text-center w-full flex items-center">
+                <div className="font-bold">
+                  Global Rank : #{user?.playerRank}
+                </div>
               </div>
-            </div>
-            {user?.clanId ? (
-              <p>Clan Rank : #{user.playerRank}</p>
-            ) : (
-              <div className=" w-full flex justify-center">
-                <Link to="/clan">
-                  <button className="bg-green-500 hover:bg-primary transition-colors rounded text-white font-bold p-2">
-                    Join a clan
-                  </button>
-                </Link>
+              <div className="justify-center text-center w-full flex items-center">
+                <div className="font-bold">
+                  Friends Rank : #{user?.playerRank}
+                </div>
               </div>
-            )}
+
+              {user?.clanId ? (
+                <div className="justify-center text-center w-full flex items-center">
+                  <div className="font-bold">
+                    Clan Rank : #{user.playerRank}
+                  </div>
+                </div>
+              ) : (
+                <div className=" w-full flex justify-center">
+                  <Link to="/clan">
+                    <button className="bg-green-500 hover:bg-primary transition-colors rounded text-white font-bold p-2">
+                      Join a clan
+                    </button>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
