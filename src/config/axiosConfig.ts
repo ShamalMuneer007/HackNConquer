@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "typescript-cookie";
 
 const instance = axios.create({
-  baseURL: "https://www.needus.store",
+  baseURL: "https://needus.store",
   withCredentials: true,
 });
 
